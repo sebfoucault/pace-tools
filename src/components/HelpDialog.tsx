@@ -188,8 +188,8 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
                 <ListItem>
                   <ListItemIcon><Info fontSize="small" sx={{ color: '#666' }} /></ListItemIcon>
                   <ListItemText 
-                    primary={t('help.lockProtection') || 'Locked fields are protected from manual edits'} 
-                    secondary={t('help.lockProtectionDesc') || 'You can only lock fields with values. The lock is automatically released if the field becomes empty.'}
+                    primary={t('help.lockProtection') || 'Locked fields are protected and visually disabled'} 
+                    secondary={t('help.lockProtectionDesc') || 'You can only lock fields with values. Locked fields appear grayed out and cannot be edited. Associated chips are also disabled. The lock is automatically released if the field becomes empty.'}
                   />
                 </ListItem>
               </List>
