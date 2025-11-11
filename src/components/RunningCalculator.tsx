@@ -235,6 +235,13 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
   useEffect(() => {
     if (!lockedField) return;
 
+    // If the locked field is now empty, unlock it
+    const lockedFieldValue = inputs[lockedField];
+    if (!lockedFieldValue || lockedFieldValue.trim() === '') {
+      setLockedField(null);
+      return;
+    }
+
     try {
       const { distance, time, pace } = inputs;
       let newInputs = { ...inputs };
@@ -325,6 +332,11 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
   const handleInputChange = (field: keyof CalculationInputs) => (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    // Prevent editing if field is locked
+    if (lockedField === field) {
+      return;
+    }
+    
     const newValue = event.target.value;
     setInputs(prev => ({
       ...prev,
@@ -340,12 +352,26 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
       setLockedField(null);
     } else {
       // Locking a new field (this automatically unlocks any other locked field)
-      setLockedField(field);
+      // Only allow locking if the field has a value
+      const fieldValue = inputs[field as keyof CalculationInputs];
+      if (fieldValue && fieldValue.trim() !== '') {
+        setLockedField(field);
+      }
     }
+  };
+
+  // Check if a field can be locked (has a non-empty value)
+  const canLockField = (field: keyof CalculationInputs): boolean => {
+    const fieldValue = inputs[field];
+    return fieldValue !== '' && fieldValue.trim() !== '';
   };
 
   // Handle distance chip click
   const handleDistanceChipClick = (distance: number) => {
+    // Prevent changing if field is locked
+    if (lockedField === 'distance') {
+      return;
+    }
     setInputs(prev => ({
       ...prev,
       distance: distance.toString(),
@@ -378,6 +404,10 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
 
   // Adjust time by a given number of seconds
   const adjustTime = (deltaSeconds: number) => {
+    // Prevent adjustment if field is locked
+    if (lockedField === 'time') {
+      return;
+    }
     const currentTimeInMinutes = parseTime(inputs.time);
     if (isNaN(currentTimeInMinutes)) return;
 
@@ -391,6 +421,10 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
 
   // Adjust pace by a given number of seconds per km/mile
   const adjustPace = (deltaSeconds: number) => {
+    // Prevent adjustment if field is locked
+    if (lockedField === 'pace') {
+      return;
+    }
     const currentPaceInMinutes = parsePace(inputs.pace);
     if (isNaN(currentPaceInMinutes)) return;
 
@@ -536,6 +570,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
               label={t('calculator.distance', { unit: unitSystem.distance })}
               value={inputs.distance}
               onChange={handleInputChange('distance')}
+              disabled={lockedField === 'distance'}
               type="number"
               inputProps={{ step: '0.1', min: '0' }}
               placeholder={systemType === 'metric' ? '10.5' : '6.5'}
@@ -550,6 +585,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                     <Divider orientation="vertical" sx={{ height: 32, alignSelf: 'center' }} />
                     <IconButton
                       onClick={() => toggleLock('distance')}
+                      disabled={lockedField !== 'distance' && !canLockField('distance')}
                       sx={{ color: lockedField === 'distance' ? '#324a5f' : '#000000' }}
                       title={lockedField === 'distance' ?
                         (t('calculator.unlockDistance') || 'Unlock distance field') :
@@ -582,13 +618,14 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                   key={chip.label}
                   label={chip.label}
                   onClick={() => handleDistanceChipClick(chip.value)}
+                  disabled={lockedField === 'distance'}
                   size="small"
                   variant={inputs.distance === chip.value.toString() ? 'filled' : 'outlined'}
                   color={inputs.distance === chip.value.toString() ? 'primary' : 'default'}
                   sx={{
                     mb: 0.5,
                     fontWeight: 500,
-                    cursor: 'pointer',
+                    cursor: lockedField === 'distance' ? 'not-allowed' : 'pointer',
                     ...(inputs.distance === chip.value.toString() && {
                       background: 'linear-gradient(90deg, #1b2a41 0%, #324a5f 100%)',
                     }),
@@ -603,7 +640,12 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
               fullWidth
               label={t('calculator.time')}
               value={inputs.time}
+              disabled={lockedField === 'time'}
               onChange={(value) => {
+                // Prevent editing if field is locked
+                if (lockedField === 'time') {
+                  return;
+                }
                 setInputs(prev => ({ ...prev, time: value }));
                 setError('');
                 setResult('');
@@ -621,6 +663,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                     <Divider orientation="vertical" sx={{ height: 32, alignSelf: 'center' }} />
                     <IconButton
                       onClick={() => toggleLock('time')}
+                      disabled={lockedField !== 'time' && !canLockField('time')}
                       sx={{ color: lockedField === 'time' ? '#324a5f' : '#000000' }}
                       title={lockedField === 'time' ?
                         (t('calculator.unlockTime') || 'Unlock time field') :
@@ -651,43 +694,43 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
               <Chip
                 label="-1min"
                 onClick={() => adjustTime(-60)}
-                disabled={!inputs.time || inputs.time.trim() === ''}
+                disabled={lockedField === 'time' || !inputs.time || inputs.time.trim() === ''}
                 size="small"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
                   fontWeight: 500,
-                  cursor: 'pointer',
+                  cursor: lockedField === 'time' ? 'not-allowed' : 'pointer',
                 }}
               />
               <Chip
                 label="-30s"
                 onClick={() => adjustTime(-30)}
-                disabled={!inputs.time || inputs.time.trim() === ''}
+                disabled={lockedField === 'time' || !inputs.time || inputs.time.trim() === ''}
                 size="small"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
                   fontWeight: 500,
-                  cursor: 'pointer',
+                  cursor: lockedField === 'time' ? 'not-allowed' : 'pointer',
                 }}
               />
               <Chip
                 label="+30s"
                 onClick={() => adjustTime(30)}
-                disabled={!inputs.time || inputs.time.trim() === ''}
+                disabled={lockedField === 'time' || !inputs.time || inputs.time.trim() === ''}
                 size="small"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
                   fontWeight: 500,
-                  cursor: 'pointer',
+                  cursor: lockedField === 'time' ? 'not-allowed' : 'pointer',
                 }}
               />
               <Chip
                 label="+1min"
                 onClick={() => adjustTime(60)}
-                disabled={!inputs.time || inputs.time.trim() === ''}
+                disabled={lockedField === 'time' || !inputs.time || inputs.time.trim() === ''}
                 size="small"
                 variant="outlined"
                 sx={{
@@ -704,7 +747,12 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
               fullWidth
               label={t('calculator.pace', { unit: unitSystem.pace })}
               value={inputs.pace}
+              disabled={lockedField === 'pace'}
               onChange={(value) => {
+                // Prevent editing if field is locked
+                if (lockedField === 'pace') {
+                  return;
+                }
                 setInputs(prev => ({ ...prev, pace: value }));
                 setError('');
                 setResult('');
@@ -722,6 +770,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                     <Divider orientation="vertical" sx={{ height: 32, alignSelf: 'center' }} />
                     <IconButton
                       onClick={() => toggleLock('pace')}
+                      disabled={lockedField !== 'pace' && !canLockField('pace')}
                       sx={{ color: lockedField === 'pace' ? '#324a5f' : '#000000' }}
                       title={lockedField === 'pace' ?
                         (t('calculator.unlockPace') || 'Unlock pace field') :
@@ -752,49 +801,49 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
               <Chip
                 label="-15s"
                 onClick={() => adjustPace(-15)}
-                disabled={!inputs.pace || inputs.pace.trim() === ''}
+                disabled={lockedField === 'pace' || !inputs.pace || inputs.pace.trim() === ''}
                 size="small"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
                   fontWeight: 500,
-                  cursor: 'pointer',
+                  cursor: lockedField === 'pace' ? 'not-allowed' : 'pointer',
                 }}
               />
               <Chip
                 label="-5s"
                 onClick={() => adjustPace(-5)}
-                disabled={!inputs.pace || inputs.pace.trim() === ''}
+                disabled={lockedField === 'pace' || !inputs.pace || inputs.pace.trim() === ''}
                 size="small"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
                   fontWeight: 500,
-                  cursor: 'pointer',
+                  cursor: lockedField === 'pace' ? 'not-allowed' : 'pointer',
                 }}
               />
               <Chip
                 label="+5s"
                 onClick={() => adjustPace(5)}
-                disabled={!inputs.pace || inputs.pace.trim() === ''}
+                disabled={lockedField === 'pace' || !inputs.pace || inputs.pace.trim() === ''}
                 size="small"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
                   fontWeight: 500,
-                  cursor: 'pointer',
+                  cursor: lockedField === 'pace' ? 'not-allowed' : 'pointer',
                 }}
               />
               <Chip
                 label="+15s"
                 onClick={() => adjustPace(15)}
-                disabled={!inputs.pace || inputs.pace.trim() === ''}
+                disabled={lockedField === 'pace' || !inputs.pace || inputs.pace.trim() === ''}
                 size="small"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
                   fontWeight: 500,
-                  cursor: 'pointer',
+                  cursor: lockedField === 'pace' ? 'not-allowed' : 'pointer',
                 }}
               />
             </Stack>

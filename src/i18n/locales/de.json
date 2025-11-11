@@ -73,6 +73,8 @@
     "step1": "Klicken Sie auf das Schloss-Symbol neben einem Feld, um es zu sperren",
     "step2": "Das gesperrte Feld wird konstant (angezeigt mit einem vollen Schloss-Symbol)",
     "step3": "Geben Sie Werte in andere Felder ein - Berechnungen erfolgen sofort!",
+    "lockProtection": "Gesperrte Felder sind vor manuellen Änderungen geschützt",
+    "lockProtectionDesc": "Sie können nur Felder mit Werten sperren. Die Sperre wird automatisch aufgehoben, wenn das Feld leer wird.",
     "lockExamples": "Sperr-Beispiele:",
     "lockDistanceTitle": "Distanz Sperren",
     "lockDistanceDesc": "Distanz bleibt konstant. Ändern Sie Zeit oder Tempo, um das andere zu berechnen.",

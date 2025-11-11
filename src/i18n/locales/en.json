@@ -73,6 +73,8 @@
     "step1": "Click the lock icon next to any field to lock it",
     "step2": "The locked field becomes constant (shown with a filled lock icon)",
     "step3": "Type values in the other fields - calculations happen instantly!",
+    "lockProtection": "Locked fields are protected from manual edits",
+    "lockProtectionDesc": "You can only lock fields with values. The lock is automatically released if the field becomes empty.",
     "lockExamples": "Lock Examples:",
     "lockDistanceTitle": "Lock Distance",
     "lockDistanceDesc": "Distance stays constant. Change time or pace to calculate the other.",

@@ -185,6 +185,13 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
                   <ListItemIcon><RunnerWithSpeedLines fontSize="small" sx={{ color: '#1b2a41' }} /></ListItemIcon>
                   <ListItemText primary={t('help.step3') || 'Type values in the other fields - calculations happen instantly!'} />
                 </ListItem>
+                <ListItem>
+                  <ListItemIcon><Info fontSize="small" sx={{ color: '#666' }} /></ListItemIcon>
+                  <ListItemText 
+                    primary={t('help.lockProtection') || 'Locked fields are protected from manual edits'} 
+                    secondary={t('help.lockProtectionDesc') || 'You can only lock fields with values. The lock is automatically released if the field becomes empty.'}
+                  />
+                </ListItem>
               </List>
             </Box>
 
