@@ -1,5 +1,9 @@
 name: Node.js Build
 
+permissioms:
+  contents: read
+  pages: write
+
 on:
   push:
     branches:
