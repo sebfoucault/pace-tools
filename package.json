@@ -2,6 +2,7 @@
   "name": "pace-tools",
   "version": "1.0.0",
   "description": "A mobile-friendly running calculator PWA with pace and speed conversions",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
