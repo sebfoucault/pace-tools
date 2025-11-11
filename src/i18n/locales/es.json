@@ -3,7 +3,8 @@
     "title": "Calculadora de Running",
     "changeLanguage": "Cambiar Idioma",
     "calculatorTab": "Calculadora",
-    "converterTab": "Convertidor"
+    "converterTab": "Convertidor",
+    "racePredictorTab": "Predictor de Carreras"
   },
   "settings": {
     "title": "Configuración",
@@ -96,6 +97,17 @@
     "tip2": "Solo un campo puede estar bloqueado a la vez. Bloquear un nuevo campo desbloquea automáticamente el anterior.",
     "tip3": "El Conversor Velocidad ↔ Ritmo en la parte inferior ayuda a convertir entre diferentes unidades de ritmo y velocidad.",
     "tip4": "Cambia entre unidades métricas e imperiales en la configuración para que coincida con tu preferencia."
+  },
+  "racePredictor": {
+    "title": "Predictor de Carreras",
+    "performanceIndex": "Índice de Rendimiento",
+    "enterData": "Ingresa distancia y tiempo en la pestaña Calculadora para obtener predicciones de carreras, o ingresa manualmente un Índice de Rendimiento arriba.",
+    "description": "Basado en tu índice de rendimiento, aquí están los tiempos predichos para varias distancias de carrera:",
+    "distance": "Distancia",
+    "time": "Tiempo",
+    "predictedTime": "Tiempo Predicho",
+    "pace": "Ritmo",
+    "note": "Nota: Las predicciones se basan en el modelo de rendimiento de Riegel/Cameron. Los tiempos reales de carrera pueden variar según el entrenamiento, las condiciones y la dificultad del recorrido."
   },
   "common": {
     "done": "Hecho",

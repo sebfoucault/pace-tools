@@ -1,8 +1,10 @@
 {
   "app": {
     "title": "Lauf-Rechner",
+    "changeLanguage": "Sprache Ändern",
     "calculatorTab": "Rechner",
-    "converterTab": "Umrechner"
+    "converterTab": "Umrechner",
+    "racePredictorTab": "Wettkampf-Vorhersage"
   },
   "calculator": {
     "title": "Laufrechner",
@@ -96,6 +98,17 @@
     "tip2": "Nur ein Feld kann gleichzeitig gesperrt werden. Das Sperren eines neuen Felds entsperrt automatisch das vorherige.",
     "tip3": "Der Geschwindigkeits ↔ Tempo Konverter unten hilft bei der Umrechnung zwischen verschiedenen Tempo- und Geschwindigkeitseinheiten.",
     "tip4": "Wechseln Sie in den Einstellungen zwischen metrischen und angelsächsischen Einheiten, um Ihrer Präferenz zu entsprechen."
+  },
+  "racePredictor": {
+    "title": "Wettkampf-Vorhersage",
+    "performanceIndex": "Leistungsindex",
+    "enterData": "Geben Sie Distanz und Zeit im Rechner-Tab ein, um Wettkampf-Vorhersagen zu erhalten, oder geben Sie manuell einen Leistungsindex oben ein.",
+    "description": "Basierend auf Ihrem Leistungsindex sind hier die vorhergesagten Zeiten für verschiedene Wettkampfdistanzen:",
+    "distance": "Distanz",
+    "time": "Zeit",
+    "predictedTime": "Vorhergesagte Zeit",
+    "pace": "Tempo",
+    "note": "Hinweis: Vorhersagen basieren auf dem Riegel/Cameron Leistungsmodell. Tatsächliche Wettkampfzeiten können aufgrund von Training, Bedingungen und Streckenschwierigkeit variieren."
   },
   "common": {
     "done": "Fertig",

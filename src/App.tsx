@@ -9,6 +9,8 @@ import {
   Typography,
   Box,
   IconButton,
+  Tabs,
+  Tab,
 } from '@mui/material';
 import {
   Speed,
@@ -18,10 +20,12 @@ import {
   SwapHoriz,
   Fullscreen,
   FullscreenExit,
+  TrendingUp,
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import RunningCalculator from './components/RunningCalculator';
 import SpeedPaceConverter from './components/SpeedPaceConverter';
+import RacePredictor from './components/RacePredictor';
 import SettingsDialog from './components/SettingsDialog';
 import HelpDialog from './components/HelpDialog';
 import './i18n/config';
@@ -199,6 +203,7 @@ function App() {
   const [unitSystem, setUnitSystem] = useState<UnitSystem>('metric');
   const [currentTab, setCurrentTab] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [performanceIndex, setPerformanceIndex] = useState<number | null>(null);
 
   const handleSettingsOpen = () => {
     setSettingsOpen(true);
@@ -222,6 +227,10 @@ function App() {
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
+  };
+
+  const handlePerformanceIndexChange = (pi: number | null) => {
+    setPerformanceIndex(pi);
   };
 
   // Fullscreen functionality
@@ -319,107 +328,69 @@ function App() {
         </AppBar>
 
         <Container maxWidth="sm" sx={{ py: 4, position: 'relative' }}>
-          {/* Floating Navigation Pills */}
-          <Box
+          {/* Material-UI Tabs Navigation */}
+          <Tabs
+            value={currentTab}
+            onChange={handleTabChange}
+            variant="fullWidth"
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              mb: 4,
-              gap: 2,
+              mb: 3,
+              borderBottom: 1,
+              borderColor: 'divider',
+              '& .MuiTab-root': {
+                minHeight: 48,
+                fontSize: '0.875rem',
+                textTransform: 'none',
+              },
             }}
           >
-            <Box
-              onClick={() => handleTabChange(null as any, 0)}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                px: 3,
-                py: 1.5,
-                borderRadius: 20,
-                cursor: 'pointer',
-                background: currentTab === 0
-                  ? 'linear-gradient(135deg, #1b2a41 0%, #324a5f 100%)'
-                  : 'white',
-                color: currentTab === 0 ? 'white' : '#1b2a41',
-                boxShadow: currentTab === 0
-                  ? '0px 4px 20px rgba(27, 42, 65, 0.25)'
-                  : '0px 2px 10px rgba(0,0,0,0.1)',
-                transition: 'all 0.3s ease-in-out',
-                fontWeight: 600,
-                fontSize: '0.95rem',
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: currentTab === 0
-                    ? '0px 6px 25px rgba(27, 42, 65, 0.35)'
-                    : '0px 4px 15px rgba(0,0,0,0.15)',
-                },
-              }}
-            >
-              <Calculate sx={{ fontSize: 20 }} />
-              {t('app.calculatorTab') || 'Calculator'}
-            </Box>
+            <Tab
+              icon={<Calculate />}
+              label={t('app.calculatorTab') || 'Calculator'}
+              iconPosition="start"
+            />
+            <Tab
+              icon={<TrendingUp />}
+              label={t('app.racePredictorTab') || 'Race Predictor'}
+              iconPosition="start"
+            />
+            <Tab
+              icon={<SwapHoriz />}
+              label={t('app.converterTab') || 'Converter'}
+              iconPosition="start"
+            />
+          </Tabs>
 
-            <Box
-              onClick={() => handleTabChange(null as any, 1)}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                px: 3,
-                py: 1.5,
-                borderRadius: 20,
-                cursor: 'pointer',
-                background: currentTab === 1
-                  ? 'linear-gradient(135deg, #1b2a41 0%, #324a5f 100%)'
-                  : 'white',
-                color: currentTab === 1 ? 'white' : '#1b2a41',
-                boxShadow: currentTab === 1
-                  ? '0px 4px 20px rgba(27, 42, 65, 0.25)'
-                  : '0px 2px 10px rgba(0,0,0,0.1)',
-                transition: 'all 0.3s ease-in-out',
-                fontWeight: 600,
-                fontSize: '0.95rem',
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: currentTab === 1
-                    ? '0px 6px 25px rgba(27, 42, 65, 0.35)'
-                    : '0px 4px 15px rgba(0,0,0,0.15)',
-                },
-              }}
-            >
-              <SwapHoriz sx={{ fontSize: 20 }} />
-              {t('app.converterTab') || 'Converter'}
-            </Box>
+          {/* Render all tabs but hide inactive ones to preserve state */}
+          <Box
+            sx={{
+              display: currentTab === 0 ? 'block' : 'none',
+            }}
+          >
+            <RunningCalculator
+              unitSystem={unitSystem}
+              onPerformanceIndexChange={handlePerformanceIndexChange}
+            />
           </Box>
 
-          {currentTab === 0 && (
-            <Box
-              sx={{
-                animation: 'fadeSlide 0.4s ease-out',
-                '@keyframes fadeSlide': {
-                  from: { opacity: 0, transform: 'translateX(-20px)' },
-                  to: { opacity: 1, transform: 'translateX(0)' },
-                },
-              }}
-            >
-              <RunningCalculator unitSystem={unitSystem} />
-            </Box>
-          )}
+          <Box
+            sx={{
+              display: currentTab === 1 ? 'block' : 'none',
+            }}
+          >
+            <RacePredictor
+              unitSystem={unitSystem}
+              performanceIndex={performanceIndex}
+            />
+          </Box>
 
-          {currentTab === 1 && (
-            <Box
-              sx={{
-                animation: 'fadeSlide 0.4s ease-out',
-                '@keyframes fadeSlide': {
-                  from: { opacity: 0, transform: 'translateX(20px)' },
-                  to: { opacity: 1, transform: 'translateX(0)' },
-                },
-              }}
-            >
-              <SpeedPaceConverter unitSystem={unitSystem} />
-            </Box>
-          )}
+          <Box
+            sx={{
+              display: currentTab === 2 ? 'block' : 'none',
+            }}
+          >
+            <SpeedPaceConverter unitSystem={unitSystem} />
+          </Box>
         </Container>
 
         <SettingsDialog

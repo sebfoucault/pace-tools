@@ -3,7 +3,8 @@
     "title": "Pace Tools",
     "changeLanguage": "Change Language",
     "calculatorTab": "Pace Calculator",
-    "converterTab": "Pace Converter"
+    "converterTab": "Pace Converter",
+    "racePredictorTab": "Race Predictor"
   },
   "settings": {
     "title": "Settings",
@@ -96,6 +97,17 @@
     "tip2": "Only one field can be locked at a time. Locking a new field automatically unlocks the previous one.",
     "tip3": "The Speed ↔ Pace Converter at the bottom helps convert between different pace and speed units.",
     "tip4": "Switch between metric and imperial units in the settings to match your preference."
+  },
+  "racePredictor": {
+    "title": "Race Predictor",
+    "performanceIndex": "Performance Index",
+    "enterData": "Enter distance and time in the Calculator tab to get race predictions, or manually enter a Performance Index above.",
+    "description": "Based on your performance index, here are predicted times for various race distances:",
+    "distance": "Distance",
+    "time": "Time",
+    "predictedTime": "Predicted Time",
+    "pace": "Pace",
+    "note": "Note: Predictions are based on the Riegel/Cameron performance model. Actual race times may vary based on training, conditions, and course difficulty."
   },
   "common": {
     "done": "Done",

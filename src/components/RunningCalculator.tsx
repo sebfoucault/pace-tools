@@ -78,11 +78,12 @@ interface UnitSystem {
 
 interface RunningCalculatorProps {
   unitSystem: 'metric' | 'imperial';
+  onPerformanceIndexChange?: (pi: number | null) => void;
 }
 
 type LockableField = 'distance' | 'time' | 'pace' | null;
 
-const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: systemType }) => {
+const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: systemType, onPerformanceIndexChange }) => {
   const { t } = useTranslation();
   const [inputs, setInputs] = useState<CalculationInputs>({
     distance: '',
@@ -533,6 +534,13 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
 
   const performanceIndex = calculatePerformanceIndex();
 
+  // Notify parent of performance index changes
+  useEffect(() => {
+    if (onPerformanceIndexChange) {
+      onPerformanceIndexChange(performanceIndex);
+    }
+  }, [performanceIndex, onPerformanceIndexChange]);
+
   return (
     <Card elevation={3}>
       <CardContent sx={{ p: 3, position: 'relative' }}>
@@ -742,6 +750,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                       onClick={calculateDistance}
                       edge="end"
                       disabled={lockedField !== null}
+                      sx={{ color: '#1b2a41' }}
                       title="Calculate distance from time and pace"
                       aria-label="Calculate distance from time and pace"
                     >
@@ -819,6 +828,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                       onClick={calculateTime}
                       edge="end"
                       disabled={lockedField !== null}
+                      sx={{ color: '#1b2a41' }}
                       title="Calculate time from distance and pace"
                       aria-label="Calculate time from distance and pace"
                     >
@@ -925,6 +935,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                       onClick={calculatePace}
                       edge="end"
                       disabled={lockedField !== null}
+                      sx={{ color: '#1b2a41' }}
                       title="Calculate pace from distance and time"
                       aria-label="Calculate pace from distance and time"
                     >

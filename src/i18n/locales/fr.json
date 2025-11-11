@@ -3,7 +3,8 @@
     "title": "Calculateur de Course",
     "changeLanguage": "Changer de Langue",
     "calculatorTab": "Calculateur",
-    "converterTab": "Convertisseur"
+    "converterTab": "Convertisseur",
+    "racePredictorTab": "Prédicteur de Course"
   },
   "settings": {
     "title": "Paramètres",
@@ -96,6 +97,17 @@
     "tip2": "Un seul champ peut être verrouillé à la fois. Verrouiller un nouveau champ déverrouille automatiquement le précédent.",
     "tip3": "Le Convertisseur Vitesse ↔ Allure en bas aide à convertir entre différentes unités d'allure et de vitesse.",
     "tip4": "Basculez entre les unités métriques et impériales dans les paramètres pour correspondre à votre préférence."
+  },
+  "racePredictor": {
+    "title": "Prédicteur de Course",
+    "performanceIndex": "Indice de Performance",
+    "enterData": "Entrez la distance et le temps dans l'onglet Calculateur pour obtenir des prédictions de course, ou entrez manuellement un Indice de Performance ci-dessus.",
+    "description": "Basé sur votre indice de performance, voici les temps prédits pour différentes distances de course :",
+    "distance": "Distance",
+    "time": "Temps",
+    "predictedTime": "Temps Prédit",
+    "pace": "Allure",
+    "note": "Note : Les prédictions sont basées sur le modèle de performance de Riegel/Cameron. Les temps de course réels peuvent varier en fonction de l'entraînement, des conditions et de la difficulté du parcours."
   },
   "common": {
     "done": "Terminé",
