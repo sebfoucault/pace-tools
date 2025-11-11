@@ -9,8 +9,6 @@ import {
   Alert,
   IconButton,
   InputAdornment,
-  FormControlLabel,
-  Switch,
   Chip,
   Stack,
   Divider,
@@ -744,7 +742,6 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                       onClick={calculateDistance}
                       edge="end"
                       disabled={lockedField !== null}
-                      sx={{ color: '#000000' }}
                       title="Calculate distance from time and pace"
                       aria-label="Calculate distance from time and pace"
                     >
@@ -822,7 +819,6 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                       onClick={calculateTime}
                       edge="end"
                       disabled={lockedField !== null}
-                      sx={{ color: '#000000' }}
                       title="Calculate time from distance and pace"
                       aria-label="Calculate time from distance and pace"
                     >
@@ -929,7 +925,6 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                       onClick={calculatePace}
                       edge="end"
                       disabled={lockedField !== null}
-                      sx={{ color: '#000000' }}
                       title="Calculate pace from distance and time"
                       aria-label="Calculate pace from distance and time"
                     >
