@@ -1,5 +1,5 @@
 {
-  "name": "running-calculator",
+  "name": "pace-tools",
   "version": "1.0.0",
   "description": "A mobile-friendly running calculator PWA with pace and speed conversions",
   "private": true,
