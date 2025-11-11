@@ -16,6 +16,8 @@ import {
   Help,
   Calculate,
   SwapHoriz,
+  Fullscreen,
+  FullscreenExit,
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import RunningCalculator from './components/RunningCalculator';
@@ -196,6 +198,7 @@ function App() {
   const [helpOpen, setHelpOpen] = useState(false);
   const [unitSystem, setUnitSystem] = useState<UnitSystem>('metric');
   const [currentTab, setCurrentTab] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const handleSettingsOpen = () => {
     setSettingsOpen(true);
@@ -221,6 +224,53 @@ function App() {
     setCurrentTab(newValue);
   };
 
+  // Fullscreen functionality
+  const toggleFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        await document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    } catch (error) {
+      console.error('Error toggling fullscreen:', error);
+    }
+  };
+
+  // Listen for fullscreen changes (e.g., user pressing ESC)
+  React.useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  // Request fullscreen on mount
+  React.useEffect(() => {
+    const requestFullscreenOnLoad = async () => {
+      try {
+        // Only request fullscreen if not already in fullscreen and the API is supported
+        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen();
+          setIsFullscreen(true);
+        }
+      } catch (error) {
+        // Silently fail - browsers often block automatic fullscreen requests
+        console.log('Automatic fullscreen blocked:', error);
+      }
+    };
+
+    // Small delay to ensure the page is fully loaded
+    const timer = setTimeout(requestFullscreenOnLoad, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -243,6 +293,14 @@ function App() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
               {t('app.title')}
             </Typography>
+            <IconButton
+              color="inherit"
+              onClick={toggleFullscreen}
+              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+              title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            >
+              {isFullscreen ? <FullscreenExit /> : <Fullscreen />}
+            </IconButton>
             <IconButton
               color="inherit"
               onClick={handleSettingsOpen}

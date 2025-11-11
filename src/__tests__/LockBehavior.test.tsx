@@ -93,7 +93,7 @@ describe('RunningCalculator - Lock Behavior', () => {
     // Fill in distance and time fields first
     const distanceInput = screen.getByLabelText(/calculator.distance/i);
     fireEvent.change(distanceInput, { target: { value: '10' } });
-    
+
     const timeInput = screen.getByLabelText(/calculator.time/i);
     fireEvent.change(timeInput, { target: { value: '50:00' } });
     fireEvent.blur(timeInput);

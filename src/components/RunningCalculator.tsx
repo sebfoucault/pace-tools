@@ -336,7 +336,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
     if (lockedField === field) {
       return;
     }
-    
+
     const newValue = event.target.value;
     setInputs(prev => ({
       ...prev,

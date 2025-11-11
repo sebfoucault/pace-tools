@@ -48,6 +48,9 @@ describe('App Smoke Tests', () => {
   test('app renders all action buttons', () => {
     render(<App />);
 
+    // Check for fullscreen button
+    expect(screen.getByLabelText(/fullscreen/i)).toBeInTheDocument();
+
     // Check for settings button
     expect(screen.getByLabelText(/settings/i)).toBeInTheDocument();
 
@@ -87,5 +90,38 @@ describe('App Smoke Tests', () => {
     // Check that the app has meaningful content
     expect(container.textContent).toBeTruthy();
     expect(container.textContent?.length).toBeGreaterThan(50);
+  });
+
+  test('fullscreen button toggles between fullscreen and exit fullscreen icons', () => {
+    // Mock fullscreen API
+    const mockRequestFullscreen = jest.fn(() => Promise.resolve());
+    const mockExitFullscreen = jest.fn(() => Promise.resolve());
+
+    Object.defineProperty(document, 'fullscreenElement', {
+      writable: true,
+      value: null
+    });
+
+    Object.defineProperty(document.documentElement, 'requestFullscreen', {
+      writable: true,
+      value: mockRequestFullscreen
+    });
+
+    Object.defineProperty(document, 'exitFullscreen', {
+      writable: true,
+      value: mockExitFullscreen
+    });
+
+    render(<App />);
+
+    // Find the fullscreen button (should show "Enter fullscreen" initially)
+    const fullscreenButton = screen.getByLabelText(/enter fullscreen/i);
+    expect(fullscreenButton).toBeInTheDocument();
+
+    // Click the fullscreen button
+    fireEvent.click(fullscreenButton);
+
+    // The requestFullscreen should have been called
+    expect(mockRequestFullscreen).toHaveBeenCalled();
   });
 });
