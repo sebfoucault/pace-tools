@@ -41,7 +41,9 @@
     "lockTime": "Bloquear campo de tiempo",
     "unlockTime": "Desbloquear campo de tiempo",
     "lockPace": "Bloquear campo de ritmo",
-    "unlockPace": "Desbloquear campo de ritmo"
+    "unlockPace": "Desbloquear campo de ritmo",
+    "performanceIndex": "Índice de Rendimiento",
+    "performanceIndexTooltip": "Índice de Rendimiento: Calculado a partir de la distancia y el tiempo. Valores más altos indican mejor rendimiento."
   },
   "converter": {
     "title": "Conversor Velocidad ↔ Ritmo",

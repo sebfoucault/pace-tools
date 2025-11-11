@@ -41,7 +41,9 @@
     "lockTime": "Lock time field",
     "unlockTime": "Unlock time field",
     "lockPace": "Lock pace field",
-    "unlockPace": "Unlock pace field"
+    "unlockPace": "Unlock pace field",
+    "performanceIndex": "Performance Index",
+    "performanceIndexTooltip": "Performance Index: Calculated from distance and time. Higher values indicate better performance."
   },
   "converter": {
     "title": "Speed ↔ Pace Converter",

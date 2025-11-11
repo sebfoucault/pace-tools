@@ -23,11 +23,11 @@ import {
   ExpandMore,
   Straighten,
   Watch,
-  DirectionsRun,
   Lock,
   LockOpen,
   Calculate,
   Info,
+  Speed,
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
@@ -66,24 +66,10 @@ const WatchWithHands: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSiz
   </Box>
 );
 
-// Enhanced DirectionsRun icon with speed lines
-const RunnerWithSpeedLines: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSize }) => (
+// Gauge icon similar to Performance Index gauge
+const GaugeIcon: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSize }) => (
   <Box sx={{ position: 'relative', display: 'inline-flex', ...sx }}>
-    <DirectionsRun sx={{ fontSize }} />
-    <Box
-      sx={{
-        position: 'absolute',
-        left: '-8px',
-        top: '30%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '2px',
-      }}
-    >
-      <Box sx={{ width: '6px', height: '1.5px', backgroundColor: 'currentColor', opacity: 0.6 }} />
-      <Box sx={{ width: '8px', height: '1.5px', backgroundColor: 'currentColor', opacity: 0.7 }} />
-      <Box sx={{ width: '6px', height: '1.5px', backgroundColor: 'currentColor', opacity: 0.6 }} />
-    </Box>
+    <Speed sx={{ fontSize }} />
   </Box>
 );
 
@@ -144,7 +130,7 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
                 />
               </ListItem>
               <ListItem>
-                <ListItemIcon><RunnerWithSpeedLines sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><GaugeIcon sx={{ color: '#1b2a41' }} /></ListItemIcon>
                 <ListItemText
                   primary={t('help.paceCalc') || 'Pace Calculation'}
                   secondary={t('help.paceCalcDesc') || 'Enter distance and time, then click the pace calculate button'}
@@ -182,7 +168,7 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
                   <ListItemText primary={t('help.step2') || 'The locked field becomes constant (shown with a filled lock icon)'} />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon><RunnerWithSpeedLines fontSize="small" sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                  <ListItemIcon><GaugeIcon fontSize="small" sx={{ color: '#1b2a41' }} /></ListItemIcon>
                   <ListItemText primary={t('help.step3') || 'Type values in the other fields - calculations happen instantly!'} />
                 </ListItem>
                 <ListItem>
@@ -217,7 +203,7 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
                   />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon><RunnerWithSpeedLines sx={{ color: '#324a5f' }} /></ListItemIcon>
+                  <ListItemIcon><GaugeIcon sx={{ color: '#324a5f' }} /></ListItemIcon>
                   <ListItemText
                     primary={t('help.lockPaceTitle') || 'Lock Pace'}
                     secondary={t('help.lockPaceDesc') || 'Pace stays constant. Change distance or time to calculate the other.'}

@@ -34,7 +34,9 @@
     "lockTime": "Zeitfeld sperren",
     "unlockTime": "Zeitfeld entsperren",
     "lockPace": "Tempofeld sperren",
-    "unlockPace": "Tempofeld entsperren"
+    "unlockPace": "Tempofeld entsperren",
+    "performanceIndex": "Leistungsindex",
+    "performanceIndexTooltip": "Leistungsindex: Berechnet aus Distanz und Zeit. Höhere Werte zeigen bessere Leistung an."
   },
   "changeLanguage": "Sprache Ändern",
   "settings": {

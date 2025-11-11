@@ -18,9 +18,9 @@ import {
 import {
   Straighten,
   Watch,
-  DirectionsRun,
   Lock,
   LockOpen,
+  Speed,
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import TimeInput from './TimeInput';
@@ -60,24 +60,10 @@ const WatchWithHands: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSiz
   </Box>
 );
 
-// Enhanced DirectionsRun icon with speed lines
-const RunnerWithSpeedLines: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSize }) => (
+// Gauge icon similar to Performance Index gauge
+const GaugeIcon: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSize }) => (
   <Box sx={{ position: 'relative', display: 'inline-flex', ...sx }}>
-    <DirectionsRun sx={{ fontSize }} />
-    <Box
-      sx={{
-        position: 'absolute',
-        left: '-8px',
-        top: '30%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '2px',
-      }}
-    >
-      <Box sx={{ width: '6px', height: '1.5px', backgroundColor: 'currentColor', opacity: 0.6 }} />
-      <Box sx={{ width: '8px', height: '1.5px', backgroundColor: 'currentColor', opacity: 0.7 }} />
-      <Box sx={{ width: '6px', height: '1.5px', backgroundColor: 'currentColor', opacity: 0.6 }} />
-    </Box>
+    <Speed sx={{ fontSize }} />
   </Box>
 );
 
@@ -107,7 +93,6 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
   });
   const [result, setResult] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [usePreciseTime, setUsePreciseTime] = useState<boolean>(false);
   const [lockedField, setLockedField] = useState<LockableField>(null);
   const lastAutoCalculatedRef = useRef<CalculationInputs>({ distance: '', time: '', pace: '' });
 
@@ -121,36 +106,17 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
   const parseTime = (timeStr: string): number => {
     const parts = timeStr.split(':').map(part => parseFloat(part));
 
-    if (parts.length === 4) {
-      const hours = parts[0];
-      const minutes = parts[1];
-      const seconds = parts[2];
-      const tenths = parts[3];
-
-      if (isNaN(hours) || isNaN(minutes) || isNaN(seconds) || isNaN(tenths) ||
-          minutes >= 60 || seconds >= 60 || tenths >= 10) {
-        throw new Error('Invalid time format');
-      }
-
-      return hours * 60 + minutes + seconds / 60 + tenths / 600;
-    } else if (parts.length === 3) {
+    if (parts.length === 3) {
       const first = parts[0];
       const second = parts[1];
       const third = parts[2];
 
-      if (third < 10 && first < 90 && third > 0) {
-        if (isNaN(first) || isNaN(second) || isNaN(third) ||
-            second >= 60 || third >= 10) {
-          throw new Error('Invalid time format');
-        }
-        return first + second / 60 + third / 600;
-      } else {
-        if (isNaN(first) || isNaN(second) || isNaN(third) ||
-            second >= 60 || third >= 60) {
-          throw new Error('Invalid time format');
-        }
-        return first * 60 + second + third / 60;
+      // Always interpret 3-part format as H:M:S
+      if (isNaN(first) || isNaN(second) || isNaN(third) ||
+          second >= 60 || third >= 60) {
+        throw new Error('Invalid time format');
       }
+      return first * 60 + second + third / 60;
     } else if (parts.length === 2) {
       return parts[0] + parts[1] / 60;
     } else if (parts.length === 1) {
@@ -260,7 +226,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
           const paceInMinutes = parsePace(pace);
           if (dist > 0 && paceInMinutes > 0) {
             const calculatedTime = dist * paceInMinutes;
-            const formattedTime = formatTime(calculatedTime, usePreciseTime);
+            const formattedTime = formatTime(calculatedTime, false);
             newInputs.time = formattedTime;
             shouldUpdate = true;
           }
@@ -303,7 +269,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
           const paceInMinutes = parsePace(pace);
           if (dist > 0 && paceInMinutes > 0) {
             const calculatedTime = dist * paceInMinutes;
-            const formattedTime = formatTime(calculatedTime, usePreciseTime);
+            const formattedTime = formatTime(calculatedTime, false);
             newInputs.time = formattedTime;
             shouldUpdate = true;
           }
@@ -327,7 +293,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
     } catch (error) {
       // Silently ignore auto-calculation errors
     }
-  }, [inputs, lockedField, usePreciseTime, formatTime, formatPace]);
+  }, [inputs, lockedField, formatTime, formatPace]);
 
   const handleInputChange = (field: keyof CalculationInputs) => (
     event: React.ChangeEvent<HTMLInputElement>
@@ -412,7 +378,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
     if (isNaN(currentTimeInMinutes)) return;
 
     const newTimeInMinutes = Math.max(0, currentTimeInMinutes + (deltaSeconds / 60));
-    const formattedTime = formatTime(newTimeInMinutes, usePreciseTime);
+    const formattedTime = formatTime(newTimeInMinutes, false);
 
     setInputs(prev => ({ ...prev, time: formattedTime }));
     setError('');
@@ -481,7 +447,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
           const dist = parseFloat(distance);
           const paceInMinutes = parsePace(pace);
           const calculatedTime = dist * paceInMinutes;
-          const formattedTime = formatTime(calculatedTime, usePreciseTime);
+          const formattedTime = formatTime(calculatedTime, false);
 
           setError('');
           setResult('');
@@ -527,40 +493,216 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
     }
   };
 
+  // Calculate Performance Index
+  const calculatePerformanceIndex = (): number | null => {
+    const { distance, time } = inputs;
+
+    if (!distance || !time || distance.trim() === '' || time.trim() === '') {
+      return null;
+    }
+
+    try {
+      const dist = parseFloat(distance);
+      const timeInMinutes = parseTime(time);
+
+      if (dist <= 0 || timeInMinutes <= 0) {
+        return null;
+      }
+
+      // Convert distance to meters (assuming input is in km or miles)
+      const distanceInMeters = systemType === 'metric' ? dist * 1000 : dist * 1609.34;
+
+      // Calculate velocity in m/min
+      const velocity = distanceInMeters / timeInMinutes;
+
+      // Calculate i = -4.60 + 0.182258 * v + 0.000104 * v^2
+      const i = -4.60 + 0.182258 * velocity + 0.000104 * velocity * velocity;
+
+      // Calculate imax = 0.8 + 0.1894393 * exp(-0.012778 * t) + 0.2989558 * exp(-0.1932605 * t)
+      const imax = 0.8 +
+                   0.1894393 * Math.exp(-0.012778 * timeInMinutes) +
+                   0.2989558 * Math.exp(-0.1932605 * timeInMinutes);
+
+      // Calculate performance index pi = i / imax
+      const pi = i / imax;
+
+      // Return as raw value (not percentage)
+      return Math.max(0, pi);
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const performanceIndex = calculatePerformanceIndex();
+
   return (
     <Card elevation={3}>
-      <CardContent sx={{ p: 3 }}>
-        <Typography
-          variant="h5"
-          component="h2"
-          gutterBottom
-          sx={{
-            color: '#1b2a41',
-            mb: 3,
-          }}
-        >
-          {t('calculator.title')}
-        </Typography>
+      <CardContent sx={{ p: 3, position: 'relative' }}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3 }}>
+          <Typography
+            variant="h5"
+            component="h2"
+            sx={{
+              color: '#1b2a41',
+            }}
+          >
+            {t('calculator.title')}
+          </Typography>
 
-        <Box
-          sx={{
-            mb: 3,
-            p: 2,
-            backgroundColor: 'rgba(27, 42, 65, 0.04)',
-            borderRadius: 2,
-            border: '1px solid rgba(27, 42, 65, 0.1)',
-          }}
-        >
-          <FormControlLabel
-            control={
-              <Switch
-                checked={usePreciseTime}
-                onChange={(e) => setUsePreciseTime(e.target.checked)}
-                color="primary"
-              />
+          {(() => {
+            if (performanceIndex === null) {
+              // Display N/A when PI cannot be calculated
+              return (
+                <Box
+                  sx={{
+                    position: 'relative',
+                    width: 80,
+                    height: 80,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  title={t('calculator.performanceIndexTooltip') || 'Performance Index: Calculated from distance and time'}
+                >
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '50%',
+                      border: '6px solid rgba(0, 0, 0, 0.1)',
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      position: 'relative',
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
+                      color: '#9e9e9e',
+                      zIndex: 1,
+                    }}
+                  >
+                    N/A
+                  </Typography>
+                </Box>
+              );
             }
-            label={t('calculator.preciseTime') || 'Precise time (tenths of seconds)'}
-          />
+
+            // Gauge range based on marathon benchmarks:
+            // - Lowest: 5h00 marathon = PI ~29
+            // - Highest: 1h55 marathon = PI ~90
+            const minPI = 29;
+            const maxPI = 90;
+
+            // Cap the displayed performance index at 100 to avoid infinity display
+            const displayPI = Math.min(100, performanceIndex);
+            const gaugePercentage = Math.max(0, Math.min(100, ((displayPI - minPI) / (maxPI - minPI)) * 100));
+
+            // Gauge: Arc from 7 o'clock (left) to 5 o'clock (right) going through the TOP
+            // This creates a 300° arc that avoids the bottom section (6 o'clock)
+            const radius = 34;
+            const centerX = 40;
+            const centerY = 40;
+
+            // 7 o'clock = 210°, 5 o'clock = 150°
+            // Going clockwise from 210° to 150° = 300° (through 9, 12, 3 o'clock)
+            const startAngleDeg = 210; // Start at 7 o'clock on the LEFT
+            const totalArcDegrees = 300; // Span 300° to reach 5 o'clock on the RIGHT (going the long way)
+
+            // Helper: convert angle to cartesian (0° = 3 o'clock, goes clockwise)
+            const polarToCartesian = (angleInDegrees: number) => {
+              const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
+              return {
+                x: centerX + radius * Math.cos(angleInRadians),
+                y: centerY + radius * Math.sin(angleInRadians),
+              };
+            };
+
+            // Create arc path from start angle spanning given degrees clockwise
+            const createArcPath = (arcDegrees: number) => {
+              const start = polarToCartesian(startAngleDeg);
+              const end = polarToCartesian(startAngleDeg + arcDegrees);
+
+              // Use large arc flag for arcs > 180°
+              const largeArcFlag = arcDegrees > 180 ? '1' : '0';
+
+              return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
+            };
+
+            // Calculate how many degrees to fill based on percentage
+            const filledArcDegrees = (totalArcDegrees * gaugePercentage) / 100;            // Color based on performance level (use displayPI for color)
+            const gaugeColor = displayPI >= 70
+              ? '#4caf50'  // Green for excellent
+              : displayPI >= 55
+              ? '#42a5f5'  // Blue for good
+              : displayPI >= 40
+              ? '#ff9800'  // Orange for moderate
+              : '#f44336'; // Red for low
+
+            return (
+              <Box
+                sx={{
+                  position: 'relative',
+                  width: 80,
+                  height: 80,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                title={t('calculator.performanceIndexTooltip') || 'Performance Index: Calculated from distance and time'}
+              >
+                {/* SVG with arcs */}
+                <svg
+                  width="80"
+                  height="80"
+                  style={{ position: 'absolute' }}
+                >
+                  {/* Thin inner circle for decoration */}
+                  <circle
+                    cx={centerX}
+                    cy={centerY}
+                    r={radius - 8}
+                    fill="none"
+                    stroke="rgba(0, 0, 0, 0.12)"
+                    strokeWidth="1"
+                  />
+
+                  {/* Gray background arc - full 300° */}
+                  <path
+                    d={createArcPath(totalArcDegrees)}
+                    fill="none"
+                    stroke="rgba(0, 0, 0, 0.1)"
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Colored arc - filled portion */}
+                  {gaugePercentage > 0 && (
+                    <path
+                      d={createArcPath(filledArcDegrees)}
+                      fill="none"
+                      stroke={gaugeColor}
+                      strokeWidth="6"
+                      strokeLinecap="round"
+                    />
+                  )}
+                </svg>
+
+                {/* Performance index value - display capped at 100 */}
+                <Typography
+                  sx={{
+                    position: 'relative',
+                    fontSize: '1.2rem',
+                    fontWeight: 700,
+                    color: '#1b2a41',
+                    zIndex: 1,
+                  }}
+                >
+                  {displayPI.toFixed(1)}
+                </Typography>
+              </Box>
+            );
+          })()}
         </Box>
 
         <Grid container spacing={4}>
@@ -612,14 +754,14 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                 ),
               }}
             />
-            <Stack direction="row" spacing={1} sx={{ mt: 2, mb: 1, mx: 1, flexWrap: 'wrap', gap: 1 }}>
+            <Stack direction="row" spacing={1} sx={{ mt: 2, mb: 1, flexWrap: 'wrap', gap: 1 }}>
               {getDistanceChips().map((chip) => (
                 <Chip
                   key={chip.label}
                   label={chip.label}
                   onClick={() => handleDistanceChipClick(chip.value)}
                   disabled={lockedField === 'distance'}
-                  size="small"
+                  size="medium"
                   variant={inputs.distance === chip.value.toString() ? 'filled' : 'outlined'}
                   color={inputs.distance === chip.value.toString() ? 'primary' : 'default'}
                   sx={{
@@ -650,8 +792,8 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                 setError('');
                 setResult('');
               }}
-              maxSegments={usePreciseTime ? 4 : 3}
-              placeholder={usePreciseTime ? "1:25:30:5" : "1:25:30"}
+              maxSegments={3}
+              placeholder="1:25:30"
               sx={{
                 '& .MuiOutlinedInput-root': {
                   backgroundColor: 'white',
@@ -690,12 +832,12 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                 ),
               }}
             />
-            <Stack direction="row" spacing={1} sx={{ mt: 2, mb: 1, mx: 1, flexWrap: 'wrap', gap: 1 }}>
+            <Stack direction="row" spacing={1} sx={{ mt: 2, mb: 1, flexWrap: 'wrap', gap: 1 }}>
               <Chip
-                label="-1min"
+                label="-60s"
                 onClick={() => adjustTime(-60)}
                 disabled={lockedField === 'time' || !inputs.time || inputs.time.trim() === ''}
-                size="small"
+                size="medium"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
@@ -707,7 +849,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                 label="-30s"
                 onClick={() => adjustTime(-30)}
                 disabled={lockedField === 'time' || !inputs.time || inputs.time.trim() === ''}
-                size="small"
+                size="medium"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
@@ -719,7 +861,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                 label="+30s"
                 onClick={() => adjustTime(30)}
                 disabled={lockedField === 'time' || !inputs.time || inputs.time.trim() === ''}
-                size="small"
+                size="medium"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
@@ -728,10 +870,10 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                 }}
               />
               <Chip
-                label="+1min"
+                label="+60s"
                 onClick={() => adjustTime(60)}
                 disabled={lockedField === 'time' || !inputs.time || inputs.time.trim() === ''}
-                size="small"
+                size="medium"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
@@ -791,18 +933,18 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                       title="Calculate pace from distance and time"
                       aria-label="Calculate pace from distance and time"
                     >
-                      <RunnerWithSpeedLines />
+                      <GaugeIcon />
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
             />
-            <Stack direction="row" spacing={1} sx={{ mt: 2, mb: 1, mx: 1, flexWrap: 'wrap', gap: 1 }}>
+            <Stack direction="row" spacing={1} sx={{ mt: 2, mb: 1, flexWrap: 'wrap', gap: 1 }}>
               <Chip
                 label="-15s"
                 onClick={() => adjustPace(-15)}
                 disabled={lockedField === 'pace' || !inputs.pace || inputs.pace.trim() === ''}
-                size="small"
+                size="medium"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
@@ -814,7 +956,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                 label="-5s"
                 onClick={() => adjustPace(-5)}
                 disabled={lockedField === 'pace' || !inputs.pace || inputs.pace.trim() === ''}
-                size="small"
+                size="medium"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
@@ -826,7 +968,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                 label="+5s"
                 onClick={() => adjustPace(5)}
                 disabled={lockedField === 'pace' || !inputs.pace || inputs.pace.trim() === ''}
-                size="small"
+                size="medium"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
@@ -838,7 +980,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                 label="+15s"
                 onClick={() => adjustPace(15)}
                 disabled={lockedField === 'pace' || !inputs.pace || inputs.pace.trim() === ''}
-                size="small"
+                size="medium"
                 variant="outlined"
                 sx={{
                   mb: 0.5,
