@@ -22,7 +22,7 @@ jobs:
           node-version: '24.x' # change to your Node.js version
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run build
         run: npm run build
