@@ -42,21 +42,10 @@ describe('Placeholder Tests - RunningCalculator', () => {
   });
 
   describe('Time field placeholders', () => {
-    it('should show standard time placeholder when precise time is disabled', () => {
+    it('should show standard time placeholder', () => {
       const { getByLabelText } = render(<RunningCalculator unitSystem="metric" />);
       const timeField = getByLabelText('Time');
       expect(timeField).toHaveAttribute('placeholder', '1:25:30');
-    });
-
-    it('should show precise time placeholder when precise time is enabled', () => {
-      const { getByLabelText } = render(<RunningCalculator unitSystem="metric" />);
-
-      // Enable precise time by finding the switch via its label
-      const preciseTimeSwitch = getByLabelText('Precise time (tenths of seconds)');
-      preciseTimeSwitch.click();
-
-      const timeField = getByLabelText('Time');
-      expect(timeField).toHaveAttribute('placeholder', '1:25:30:5');
     });
   });
 

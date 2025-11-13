@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import TimeInput from './TimeInput';
 import { calculatePerformanceIndex as calcPI, convertDistanceToMeters } from '../utils/performanceIndex';
 import { formatTime as sharedFormatTime, formatPace as sharedFormatPace } from '../utils/formatters';
+import type { UnitSystem, CalculationInputs, UnitSystemConfig, LockableField } from '../types';
 
 // Enhanced Watch icon with clock hands - simplified and cleaner
 const WatchWithHands: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSize }) => (
@@ -67,23 +68,10 @@ const GaugeIcon: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSize }) 
   </Box>
 );
 
-interface CalculationInputs {
-  distance: string;
-  time: string;
-  pace: string;
-}
-
-interface UnitSystem {
-  distance: 'km' | 'miles';
-  pace: 'min/km' | 'min/mile';
-}
-
 interface RunningCalculatorProps {
-  unitSystem: 'metric' | 'imperial';
+  unitSystem: UnitSystem;
   onPerformanceIndexChange?: (pi: number | null) => void;
 }
-
-type LockableField = 'distance' | 'time' | 'pace' | null;
 
 const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: systemType, onPerformanceIndexChange }) => {
   const { t } = useTranslation();
@@ -98,7 +86,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
   const lastAutoCalculatedRef = useRef<CalculationInputs>({ distance: '', time: '', pace: '' });
 
   // Derive unit system from prop
-  const unitSystem: UnitSystem = {
+  const unitSystem: UnitSystemConfig = {
     distance: systemType === 'metric' ? 'km' : 'miles',
     pace: systemType === 'metric' ? 'min/km' : 'min/mile',
   };
@@ -152,8 +140,8 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
   };
 
   // Format time helper function - uses shared formatter
-  const formatTime = useCallback((minutes: number, includeDeciseconds: boolean = false): string => {
-    return sharedFormatTime(minutes, includeDeciseconds);
+  const formatTime = useCallback((minutes: number): string => {
+    return sharedFormatTime(minutes);
   }, []);
 
   // Format pace helper function - uses shared formatter
@@ -190,7 +178,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
           const paceInMinutes = parsePace(pace);
           if (dist > 0 && paceInMinutes > 0) {
             const calculatedTime = dist * paceInMinutes;
-            const formattedTime = formatTime(calculatedTime, false);
+            const formattedTime = formatTime(calculatedTime);
             newInputs.time = formattedTime;
             shouldUpdate = true;
           }
@@ -233,7 +221,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
           const paceInMinutes = parsePace(pace);
           if (dist > 0 && paceInMinutes > 0) {
             const calculatedTime = dist * paceInMinutes;
-            const formattedTime = formatTime(calculatedTime, false);
+            const formattedTime = formatTime(calculatedTime);
             newInputs.time = formattedTime;
             shouldUpdate = true;
           }
@@ -342,7 +330,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
     if (isNaN(currentTimeInMinutes)) return;
 
     const newTimeInMinutes = Math.max(0, currentTimeInMinutes + (deltaSeconds / 60));
-    const formattedTime = formatTime(newTimeInMinutes, false);
+    const formattedTime = formatTime(newTimeInMinutes);
 
     setInputs(prev => ({ ...prev, time: formattedTime }));
     setError('');
@@ -411,7 +399,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
           const dist = parseFloat(distance);
           const paceInMinutes = parsePace(pace);
           const calculatedTime = dist * paceInMinutes;
-          const formattedTime = formatTime(calculatedTime, false);
+          const formattedTime = formatTime(calculatedTime);
 
           setError('');
           setResult('');

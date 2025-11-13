@@ -50,7 +50,7 @@ describe('RunningCalculator - Lock Behavior', () => {
     fireEvent.click(timeLockButton);
 
     // Time adjustment chips should be disabled
-    const plusOneMin = screen.getByText('+1min').closest('div[role="button"]');
+    const plusOneMin = screen.getByText('+60s').closest('div[role="button"]');
     expect(plusOneMin).toHaveClass('Mui-disabled');
 
     // Unlock time and lock pace
@@ -156,7 +156,7 @@ describe('RunningCalculator - Lock Behavior', () => {
     fireEvent.click(lockButtons[1]); // Time lock button
 
     // Try to adjust time - should not work
-    const plusOneMin = screen.getByText('+1min');
+    const plusOneMin = screen.getByText('+60s');
     fireEvent.click(plusOneMin);
     expect(timeInput).toHaveValue('30:00'); // Still 30:00, not changed
 

@@ -28,6 +28,7 @@ import SpeedPaceConverter from './components/SpeedPaceConverter';
 import RacePredictor from './components/RacePredictor';
 import SettingsDialog from './components/SettingsDialog';
 import HelpDialog from './components/HelpDialog';
+import type { UnitSystem } from './types';
 import './i18n/config';
 
 const theme = createTheme({
@@ -192,8 +193,6 @@ const theme = createTheme({
     },
   },
 });
-
-type UnitSystem = 'metric' | 'imperial';
 
 function App() {
   const { t } = useTranslation();

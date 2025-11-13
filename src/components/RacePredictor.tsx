@@ -16,17 +16,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { predictTimeFromPI } from '../utils/performanceIndex';
 import { formatTimeFromMinutes, formatPaceFromMinutes } from '../utils/formatters';
+import type { UnitSystem, RaceDistance } from '../types';
 
 interface RacePredictorProps {
-  unitSystem: 'metric' | 'imperial';
+  unitSystem: UnitSystem;
   performanceIndex: number | null;
-}
-
-interface RaceDistance {
-  name: string;
-  meters: number;
-  displayKm?: number;
-  displayMiles?: number;
 }
 
 const RACE_DISTANCES: RaceDistance[] = [

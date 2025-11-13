@@ -8,39 +8,22 @@
 /**
  * Format time from minutes to HH:MM:SS or MM:SS format
  * @param minutes - Time in minutes
- * @param includeDeciseconds - Whether to include deciseconds (tenths of a second)
  * @returns Formatted time string
  */
-export function formatTime(minutes: number, includeDeciseconds: boolean = false): string {
+export function formatTime(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const mins = Math.floor(minutes % 60);
   const totalSeconds = (minutes % 1) * 60;
+  const secs = Math.round(totalSeconds);
 
-  if (includeDeciseconds) {
-    const secs = Math.floor(totalSeconds);
-    const deciseconds = Math.round((totalSeconds % 1) * 10);
+  if (secs >= 60) {
+    return formatTime(minutes + 1/60);
+  }
 
-    if (deciseconds >= 10) {
-      return formatTime(minutes + 1/60, false);
-    }
-
-    if (hours > 0) {
-      return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}:${deciseconds}`;
-    } else {
-      return `${mins}:${secs.toString().padStart(2, '0')}:${deciseconds}`;
-    }
+  if (hours > 0) {
+    return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   } else {
-    const secs = Math.round(totalSeconds);
-
-    if (secs >= 60) {
-      return formatTime(minutes + 1/60, false);
-    }
-
-    if (hours > 0) {
-      return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    } else {
-      return `${mins}:${secs.toString().padStart(2, '0')}`;
-    }
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
 }
 
@@ -91,4 +74,93 @@ export function formatPaceFromMinutes(paceInMinutes: number): string {
   const mins = Math.floor(totalSeconds / 60);
   const secs = totalSeconds % 60;
   return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+/**
+ * Parse time string (HH:MM:SS or MM:SS) to minutes
+ * Supports formats:
+ * - HH:MM:SS (e.g., "1:30:45")
+ * - MM:SS (e.g., "45:30")
+ *
+ * @param timeString - Time string to parse
+ * @returns Time in minutes, or NaN if invalid
+ */
+export function parseTimeToMinutes(timeString: string): number {
+  if (!timeString || typeof timeString !== 'string') {
+    return NaN;
+  }
+
+  const trimmed = timeString.trim();
+  if (trimmed === '') {
+    return NaN;
+  }
+
+  const parts = trimmed.split(':');
+
+  if (parts.length < 2 || parts.length > 3) {
+    return NaN;
+  }
+
+  const numbers = parts.map(part => {
+    const num = parseFloat(part);
+    return isNaN(num) || num < 0 ? NaN : num;
+  });
+
+  if (numbers.some(n => isNaN(n))) {
+    return NaN;
+  }
+
+  let hours = 0;
+  let minutes = 0;
+  let seconds = 0;
+
+  if (parts.length === 3) {
+    // HH:MM:SS format
+    [hours, minutes, seconds] = numbers;
+    if (minutes >= 60 || seconds >= 60) {
+      return NaN;
+    }
+  } else if (parts.length === 2) {
+    // MM:SS format
+    [minutes, seconds] = numbers;
+    if (seconds >= 60) {
+      return NaN;
+    }
+  }
+
+  const totalMinutes = hours * 60 + minutes + seconds / 60;
+  return totalMinutes;
+}
+
+/**
+ * Parse pace string (MM:SS) to minutes per distance unit
+ * Supports format: MM:SS (e.g., "5:30" for 5:30 min/km)
+ *
+ * @param paceString - Pace string to parse
+ * @returns Pace in minutes per distance unit, or NaN if invalid
+ */
+export function parsePaceToMinutes(paceString: string): number {
+  if (!paceString || typeof paceString !== 'string') {
+    return NaN;
+  }
+
+  const trimmed = paceString.trim();
+  if (trimmed === '') {
+    return NaN;
+  }
+
+  const parts = trimmed.split(':');
+
+  if (parts.length !== 2) {
+    return NaN;
+  }
+
+  const minutes = parseFloat(parts[0]);
+  const seconds = parseFloat(parts[1]);
+
+  if (isNaN(minutes) || isNaN(seconds) || minutes < 0 || seconds < 0 || seconds >= 60) {
+    return NaN;
+  }
+
+  return minutes + seconds / 60;
 }

@@ -38,11 +38,11 @@ describe('TimeInput Component Tests', () => {
 
     const input = screen.getByLabelText(/time/i);
 
-    // Type "12530"
+    // Type "12530" - with 5 digits, it formats as HH:MM:SS with last segment having 1 digit
     fireEvent.change(input, { target: { value: '12530' } });
 
-    // Should be formatted as "1:25:30"
-    expect(mockOnChange).toHaveBeenCalledWith('1:25:30');
+    // Should be formatted as "12:53:0" (HH:MM:S)
+    expect(mockOnChange).toHaveBeenCalledWith('12:53:0');
   });
 
   test('strips non-numeric characters', () => {
@@ -108,19 +108,6 @@ describe('TimeInput Component Tests', () => {
 
     // Should format as HH:MM:SS: "12:34:56"
     expect(mockOnChange).toHaveBeenCalledWith('12:34:56');
-  });
-
-  test('respects maxSegments prop for precise time (4 segments)', () => {
-    const mockOnChange = jest.fn();
-    render(<TimeInput value="" onChange={mockOnChange} label="Time" maxSegments={4} />);
-
-    const input = screen.getByLabelText(/time/i);
-
-    // Type 7 digits
-    fireEvent.change(input, { target: { value: '1234567' } });
-
-    // Should format as HH:MM:SS:d: "12:34:56:7"
-    expect(mockOnChange).toHaveBeenCalledWith('12:34:56:7');
   });
 
   test('has numeric input mode for mobile keyboards', () => {

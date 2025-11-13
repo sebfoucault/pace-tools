@@ -4,7 +4,7 @@ import { TextField, TextFieldProps } from '@mui/material';
 interface TimeInputProps extends Omit<TextFieldProps, 'onChange' | 'value'> {
   value: string;
   onChange: (value: string) => void;
-  maxSegments?: number; // 2 for MM:SS, 3 for HH:MM:SS, 4 for HH:MM:SS:d
+  maxSegments?: number; // 2 for MM:SS, 3 for HH:MM:SS
 }
 
 /**
@@ -14,7 +14,6 @@ interface TimeInputProps extends Omit<TextFieldProps, 'onChange' | 'value'> {
  * Examples:
  * - User types "530" → displays "5:30"
  * - User types "12530" → displays "1:25:30"
- * - User types "125305" → displays "1:25:30:5"
  */
 const TimeInput: React.FC<TimeInputProps> = ({
   value,
@@ -40,19 +39,7 @@ const TimeInput: React.FC<TimeInputProps> = ({
 
     // Determine segment sizes based on maxSegments and input length
     let segments: number[] = [];
-    if (maxSegments === 4) {
-      // HH:MM:SS:d format
-      if (digits.length <= 3) {
-        // MM:S or M:SS
-        segments = [digits.length <= 1 ? 1 : digits.length - 2, 2];
-      } else if (digits.length <= 5) {
-        // MM:SS:d
-        segments = [2, 2, 1];
-      } else {
-        // HH:MM:SS:d
-        segments = [2, 2, 2, 1];
-      }
-    } else if (maxSegments === 3) {
+    if (maxSegments === 3) {
       // Variable format based on length
       if (digits.length <= 3) {
         // M:SS or MM:S - use all but last 2 for minutes, last 2 for seconds
@@ -60,9 +47,6 @@ const TimeInput: React.FC<TimeInputProps> = ({
       } else if (digits.length <= 4) {
         // MM:SS
         segments = [2, 2];
-      } else if (digits.length <= 5) {
-        // MM:SS:d or M:SS:SS
-        segments = [1, 2, 2];
       } else {
         // HH:MM:SS
         segments = [2, 2, 2];
@@ -117,9 +101,7 @@ const TimeInput: React.FC<TimeInputProps> = ({
 
     // Limit based on maxSegments
     let maxLength = 6; // Default for HH:MM:SS
-    if (maxSegments === 4) {
-      maxLength = 7; // HH:MM:SS:d
-    } else if (maxSegments === 2) {
+    if (maxSegments === 2) {
       maxLength = 4; // MM:SS
     }
 
