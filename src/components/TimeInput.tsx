@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, TextFieldProps } from '@mui/material';
+import { formatDigitsAsTime } from '../utils/formatters';
 
 interface TimeInputProps extends Omit<TextFieldProps, 'onChange' | 'value'> {
   value: string;
@@ -13,7 +14,7 @@ interface TimeInputProps extends Omit<TextFieldProps, 'onChange' | 'value'> {
  *
  * Examples:
  * - User types "530" → displays "5:30"
- * - User types "12530" → displays "1:25:30"
+ * - User types "13000" → displays "1:30:00"
  */
 const TimeInput: React.FC<TimeInputProps> = ({
   value,
@@ -23,68 +24,11 @@ const TimeInput: React.FC<TimeInputProps> = ({
 }) => {
   const [displayValue, setDisplayValue] = useState('');
 
-  // Format the value for display (add colons)
-  const formatTime = React.useCallback((rawValue: string): string => {
-    if (!rawValue) return '';
-
-    // If the value already has colons in the right format, keep it as is
-    // This preserves programmatically set values (e.g., from calculations)
-    if (rawValue.includes(':')) {
-      return rawValue;
-    }
-
-    // Remove any non-digit characters for user input
-    const digits = rawValue.replace(/\D/g, '');
-    if (!digits) return '';
-
-    // Determine segment sizes based on maxSegments and input length
-    let segments: number[] = [];
-    if (maxSegments === 3) {
-      // Variable format based on length
-      if (digits.length <= 3) {
-        // M:SS or MM:S - use all but last 2 for minutes, last 2 for seconds
-        segments = [digits.length <= 1 ? 1 : digits.length - 2, 2];
-      } else if (digits.length <= 4) {
-        // MM:SS
-        segments = [2, 2];
-      } else {
-        // HH:MM:SS
-        segments = [2, 2, 2];
-      }
-    } else if (maxSegments === 2) {
-      // MM:SS format - always 2 segments
-      if (digits.length <= 1) {
-        segments = [1];
-      } else if (digits.length <= 2) {
-        segments = [1, 1];
-      } else if (digits.length <= 3) {
-        segments = [1, 2];
-      } else {
-        segments = [2, 2];
-      }
-    }
-
-    // Build the formatted string
-    const parts: string[] = [];
-    let position = 0;
-
-    for (let i = 0; i < segments.length && position < digits.length; i++) {
-      const segmentLength = segments[i];
-      const segment = digits.substring(position, position + segmentLength);
-      if (segment) {
-        parts.push(segment);
-        position += segmentLength;
-      }
-    }
-
-    return parts.join(':');
-  }, [maxSegments]);
-
   // Update display when value prop changes
   useEffect(() => {
-    const formatted = formatTime(value);
+    const formatted = formatDigitsAsTime(value, maxSegments);
     setDisplayValue(formatted);
-  }, [value, formatTime]);
+  }, [value, maxSegments]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
@@ -108,7 +52,7 @@ const TimeInput: React.FC<TimeInputProps> = ({
     const limitedDigits = digits.substring(0, maxLength);
 
     // Format for display (adds colons automatically)
-    const formatted = formatTime(limitedDigits);
+    const formatted = formatDigitsAsTime(limitedDigits, maxSegments);
     setDisplayValue(formatted);
 
     // Pass the formatted value (with colons) to parent

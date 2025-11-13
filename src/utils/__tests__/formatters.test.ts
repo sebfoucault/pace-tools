@@ -1,4 +1,4 @@
-import { formatTime, formatPace, formatTimeFromMinutes, formatPaceFromMinutes, parseTimeToMinutes, parsePaceToMinutes } from '../formatters';
+import { formatTime, formatPace, formatTimeFromMinutes, formatPaceFromMinutes, parseTimeToMinutes, parsePaceToMinutes, formatDigitsAsTime } from '../formatters';
 
 describe('formatters utilities', () => {
   describe('formatTime', () => {
@@ -298,6 +298,92 @@ describe('formatters utilities', () => {
         const formatted = formatPaceFromMinutes(pace);
         const parsed = parsePaceToMinutes(formatted);
         expect(parsed).toBeCloseTo(pace, 1);
+      });
+    });
+  });
+
+  describe('formatDigitsAsTime', () => {
+    describe('3-segment format (time)', () => {
+      it('should format 1-2 digits as seconds only', () => {
+        expect(formatDigitsAsTime('5', 3)).toBe('5');
+        expect(formatDigitsAsTime('53', 3)).toBe('53');
+      });
+
+      it('should format 3 digits as M:SS', () => {
+        expect(formatDigitsAsTime('130', 3)).toBe('1:30');
+        expect(formatDigitsAsTime('530', 3)).toBe('5:30');
+      });
+
+      it('should format 4 digits as MM:SS', () => {
+        expect(formatDigitsAsTime('1300', 3)).toBe('13:00');
+        expect(formatDigitsAsTime('4530', 3)).toBe('45:30');
+      });
+
+      it('should format 5 digits as H:MM:SS', () => {
+        expect(formatDigitsAsTime('13000', 3)).toBe('1:30:00');
+        expect(formatDigitsAsTime('24530', 3)).toBe('2:45:30');
+      });
+
+      it('should format 6 digits as HH:MM:SS', () => {
+        expect(formatDigitsAsTime('130000', 3)).toBe('13:00:00');
+        expect(formatDigitsAsTime('123456', 3)).toBe('12:34:56');
+      });
+    });
+
+    describe('2-segment format (pace)', () => {
+      it('should format 1 digit as single minute', () => {
+        expect(formatDigitsAsTime('5', 2)).toBe('5');
+      });
+
+      it('should format 2 digits as M:S', () => {
+        expect(formatDigitsAsTime('53', 2)).toBe('5:3');
+      });
+
+      it('should format 3 digits as M:SS', () => {
+        expect(formatDigitsAsTime('530', 2)).toBe('5:30');
+      });
+
+      it('should format 4 digits as MM:SS', () => {
+        expect(formatDigitsAsTime('1230', 2)).toBe('12:30');
+      });
+    });
+
+    describe('edge cases', () => {
+      it('should handle empty input', () => {
+        expect(formatDigitsAsTime('', 3)).toBe('');
+        expect(formatDigitsAsTime('', 2)).toBe('');
+      });
+
+      it('should strip non-digit characters from new input', () => {
+        expect(formatDigitsAsTime('5abc30', 3)).toBe('5:30');
+        expect(formatDigitsAsTime('1x3y0z0', 3)).toBe('13:00');
+      });
+
+      it('should preserve existing colon-formatted values', () => {
+        expect(formatDigitsAsTime('50:00', 3)).toBe('50:00');
+        expect(formatDigitsAsTime('1:30:45', 3)).toBe('1:30:45');
+        expect(formatDigitsAsTime('5:30', 2)).toBe('5:30');
+      });
+
+      it('should handle partial input gracefully', () => {
+        expect(formatDigitsAsTime('1', 3)).toBe('1');
+        expect(formatDigitsAsTime('12', 3)).toBe('12');
+      });
+    });
+
+    describe('progressive input simulation', () => {
+      it('should format digits progressively for time (1, 3, 0, 0, 0)', () => {
+        expect(formatDigitsAsTime('1', 3)).toBe('1');
+        expect(formatDigitsAsTime('13', 3)).toBe('13');
+        expect(formatDigitsAsTime('130', 3)).toBe('1:30');
+        expect(formatDigitsAsTime('1300', 3)).toBe('13:00');
+        expect(formatDigitsAsTime('13000', 3)).toBe('1:30:00');
+      });
+
+      it('should format digits progressively for pace (5, 3, 0)', () => {
+        expect(formatDigitsAsTime('5', 2)).toBe('5');
+        expect(formatDigitsAsTime('53', 2)).toBe('5:3');
+        expect(formatDigitsAsTime('530', 2)).toBe('5:30');
       });
     });
   });

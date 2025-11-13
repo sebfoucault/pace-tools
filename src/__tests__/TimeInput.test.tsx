@@ -38,11 +38,11 @@ describe('TimeInput Component Tests', () => {
 
     const input = screen.getByLabelText(/time/i);
 
-    // Type "12530" - with 5 digits, it formats as HH:MM:SS with last segment having 1 digit
-    fireEvent.change(input, { target: { value: '12530' } });
+    // Type "13000" - with 5 digits, it formats as H:MM:SS
+    fireEvent.change(input, { target: { value: '13000' } });
 
-    // Should be formatted as "12:53:0" (HH:MM:S)
-    expect(mockOnChange).toHaveBeenCalledWith('12:53:0');
+    // Should be formatted as "1:30:00" (H:MM:SS)
+    expect(mockOnChange).toHaveBeenCalledWith('1:30:00');
   });
 
   test('strips non-numeric characters', () => {
@@ -162,5 +162,61 @@ describe('TimeInput Component Tests', () => {
     // Should not cause any errors or excessive re-renders
     const input = screen.getByLabelText(/pace/i);
     expect(input).toHaveValue('5:30');
+  });
+
+  describe('Progressive digit formatting (maxSegments=3)', () => {
+    test('1 digit: formats as seconds only', () => {
+      const mockOnChange = jest.fn();
+      render(<TimeInput value="" onChange={mockOnChange} label="Time" maxSegments={3} />);
+      const input = screen.getByLabelText(/time/i);
+
+      fireEvent.change(input, { target: { value: '5' } });
+      expect(mockOnChange).toHaveBeenCalledWith('5');
+    });
+
+    test('2 digits: formats as seconds only', () => {
+      const mockOnChange = jest.fn();
+      render(<TimeInput value="" onChange={mockOnChange} label="Time" maxSegments={3} />);
+      const input = screen.getByLabelText(/time/i);
+
+      fireEvent.change(input, { target: { value: '53' } });
+      expect(mockOnChange).toHaveBeenCalledWith('53');
+    });
+
+    test('3 digits: formats as M:SS', () => {
+      const mockOnChange = jest.fn();
+      render(<TimeInput value="" onChange={mockOnChange} label="Time" maxSegments={3} />);
+      const input = screen.getByLabelText(/time/i);
+
+      fireEvent.change(input, { target: { value: '130' } });
+      expect(mockOnChange).toHaveBeenCalledWith('1:30');
+    });
+
+    test('4 digits: formats as MM:SS', () => {
+      const mockOnChange = jest.fn();
+      render(<TimeInput value="" onChange={mockOnChange} label="Time" maxSegments={3} />);
+      const input = screen.getByLabelText(/time/i);
+
+      fireEvent.change(input, { target: { value: '1300' } });
+      expect(mockOnChange).toHaveBeenCalledWith('13:00');
+    });
+
+    test('5 digits: formats as H:MM:SS', () => {
+      const mockOnChange = jest.fn();
+      render(<TimeInput value="" onChange={mockOnChange} label="Time" maxSegments={3} />);
+      const input = screen.getByLabelText(/time/i);
+
+      fireEvent.change(input, { target: { value: '13000' } });
+      expect(mockOnChange).toHaveBeenCalledWith('1:30:00');
+    });
+
+    test('6 digits: formats as HH:MM:SS', () => {
+      const mockOnChange = jest.fn();
+      render(<TimeInput value="" onChange={mockOnChange} label="Time" maxSegments={3} />);
+      const input = screen.getByLabelText(/time/i);
+
+      fireEvent.change(input, { target: { value: '130000' } });
+      expect(mockOnChange).toHaveBeenCalledWith('13:00:00');
+    });
   });
 });
