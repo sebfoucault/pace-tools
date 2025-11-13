@@ -131,11 +131,11 @@ describe('RunningCalculator - Lock Behavior', () => {
     fireEvent.click(lockButtons[0]);
 
     // Distance chips should be disabled
-    const fiveKmChip = screen.getByText('5 km').closest('div[role="button"]');
+    const fiveKmChip = screen.getByText('5k').closest('div[role="button"]');
     expect(fiveKmChip).toHaveClass('Mui-disabled');
 
     // Try to click - should not change value
-    fireEvent.click(screen.getByText('5 km'));
+    fireEvent.click(screen.getByText('5k'));
     expect(distanceInput.value).toBe('10'); // Still 10, not changed to 5
   });
 
@@ -250,7 +250,7 @@ describe('RunningCalculator - Lock Behavior', () => {
     fireEvent.click(lockButtons[0]);
 
     // Try to use distance chip - should not work
-    const tenKmChip = screen.getByText('10 km');
+    const tenKmChip = screen.getByText('10k');
     fireEvent.click(tenKmChip);
 
     // Distance should NOT be updated because it's locked
