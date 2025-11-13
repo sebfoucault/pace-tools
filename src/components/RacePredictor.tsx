@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -14,6 +14,8 @@ import {
   Alert,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { predictTimeFromPI } from '../utils/performanceIndex';
+import { formatTimeFromMinutes, formatPaceFromMinutes } from '../utils/formatters';
 
 interface RacePredictorProps {
   unitSystem: 'metric' | 'imperial';
@@ -42,93 +44,6 @@ const RACE_DISTANCES: RaceDistance[] = [
 
 const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIndex }) => {
   const { t } = useTranslation();
-  const [customPI, setCustomPI] = useState<string>('');
-
-  // Use custom PI if provided, otherwise use the one from calculator
-  const activePI = customPI !== '' ? parseFloat(customPI) : performanceIndex;
-
-  // Format time helper function
-  const formatTime = useCallback((minutes: number): string => {
-    const totalSeconds = Math.round(minutes * 60);
-    const hours = Math.floor(totalSeconds / 3600);
-    const mins = Math.floor((totalSeconds % 3600) / 60);
-    const secs = totalSeconds % 60;
-
-    if (hours > 0) {
-      return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    } else {
-      return `${mins}:${secs.toString().padStart(2, '0')}`;
-    }
-  }, []);
-
-  // Format pace helper function
-  const formatPace = useCallback((paceInMinutes: number): string => {
-    const totalSeconds = Math.round(paceInMinutes * 60);
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  }, []);
-
-  // Calculate predicted time for a given distance based on performance index
-  // Using the exact equations from performance-index.md:
-  // pi = i / imax where:
-  // i = -4.60 + 0.182258 * v + 0.000104 * v^2
-  // imax = 0.8 + 0.1894393 * exp(-0.012778 * t) + 0.2989558 * exp(-0.1932605 * t)
-  // v = d / t (velocity in m/min)
-  const predictTime = useCallback((distanceMeters: number, pi: number): number | null => {
-    if (!pi || pi <= 0) return null;
-
-    try {
-      // Binary search to find the time that produces the target PI
-      let minTime = 1; // 1 minute minimum
-      let maxTime = distanceMeters / 10; // Very slow pace: 10 m/min
-      let timeMinutes = distanceMeters / 200; // Initial guess: ~200 m/min
-
-      // Iterative refinement to converge on the correct time
-      for (let iteration = 0; iteration < 100; iteration++) {
-        // Calculate velocity v = d / t in m/min
-        const velocity = distanceMeters / timeMinutes;
-
-        // Calculate i using exact formula: i = -4.60 + 0.182258 * v + 0.000104 * v^2
-        const i = -4.60 + 0.182258 * velocity + 0.000104 * velocity * velocity;
-
-        // Calculate imax using exact formula:
-        // imax = 0.8 + 0.1894393 * exp(-0.012778 * t) + 0.2989558 * exp(-0.1932605 * t)
-        const imax = 0.8 +
-                     0.1894393 * Math.exp(-0.012778 * timeMinutes) +
-                     0.2989558 * Math.exp(-0.1932605 * timeMinutes);
-
-        // Calculate current PI: pi = i / imax
-        const currentPI = i / imax;
-
-        // Check if we've converged
-        if (Math.abs(currentPI - pi) < 0.0001) {
-          return timeMinutes;
-        }
-
-        // Binary search adjustment
-        if (currentPI > pi) {
-          // Current pace is too fast, need more time (slower)
-          minTime = timeMinutes;
-        } else {
-          // Current pace is too slow, need less time (faster)
-          maxTime = timeMinutes;
-        }
-
-        // Update time estimate (midpoint of range)
-        timeMinutes = (minTime + maxTime) / 2;
-
-        // Sanity check
-        if (timeMinutes <= 0 || timeMinutes > 100000 || !isFinite(timeMinutes)) {
-          return null;
-        }
-      }
-
-      return timeMinutes;
-    } catch (error) {
-      return null;
-    }
-  }, []);
 
   // Calculate pace for a predicted time and distance
   const calculatePace = (timeMinutes: number, distanceKm: number): number => {
@@ -149,9 +64,9 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
             {t('racePredictor.title') || 'Race Predictor'}
           </Typography>
 
-          {/* Performance Index Gauge - same as in RunningCalculator */}
+          {/* Performance Index Gauge */}
           {(() => {
-            if (activePI === null || activePI <= 0) {
+            if (performanceIndex === null || performanceIndex <= 0) {
               // Display N/A when PI cannot be calculated
               return (
                 <Box
@@ -162,13 +77,8 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    cursor: 'pointer',
                   }}
-                  onClick={() => {
-                    const newPI = prompt('Enter Performance Index:', performanceIndex?.toFixed(1) || '');
-                    if (newPI) setCustomPI(newPI);
-                  }}
-                  title="Click to enter Performance Index manually"
+                  aria-label="Performance Index not available"
                 >
                   <Box
                     sx={{
@@ -199,7 +109,7 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
             const maxPI = 90;
 
             // Cap the displayed performance index at 100
-            const displayPI = Math.min(100, activePI);
+            const displayPI = Math.min(100, performanceIndex);
             const gaugePercentage = Math.max(0, Math.min(100, ((displayPI - minPI) / (maxPI - minPI)) * 100));
 
             // Gauge: Arc from 7 o'clock to 5 o'clock (300° arc)
@@ -243,13 +153,8 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  cursor: 'pointer',
                 }}
-                onClick={() => {
-                  const newPI = prompt('Enter Performance Index:', activePI.toFixed(1));
-                  if (newPI) setCustomPI(newPI);
-                }}
-                title="Performance Index - Click to edit manually"
+                aria-label={`Performance Index: ${displayPI.toFixed(1)}`}
               >
                 <svg
                   width="80"
@@ -297,10 +202,10 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
           })()}
         </Box>
 
-        {activePI === null || activePI <= 0 ? (
+        {performanceIndex === null || performanceIndex <= 0 ? (
           <Alert severity="info" sx={{ borderRadius: 2 }}>
             {t('racePredictor.enterData') ||
-              'Enter distance and time in the Calculator tab to get race predictions, or manually enter a Performance Index above.'}
+              'Enter distance and time in the Calculator tab to get race predictions.'}
           </Alert>
         ) : (
           <Box>
@@ -313,11 +218,11 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
               <Table size="small">
                 <TableHead>
                   <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                    <TableCell sx={{ fontWeight: 600, color: '#1b2a41', width: '30%' }}>
+                    <TableCell sx={{ fontWeight: 600, color: '#1b2a41' }}>
                       {t('racePredictor.distance') || 'Distance'}
                     </TableCell>
                     <TableCell align="right" sx={{ fontWeight: 600, color: '#1b2a41' }}>
-                      {t('racePredictor.time') || 'Time'}
+                      {t('racePredictor.predictedTime') || 'Predicted Time'}
                     </TableCell>
                     <TableCell align="right" sx={{ fontWeight: 600, color: '#1b2a41' }}>
                       {t('racePredictor.pace') || 'Pace'}
@@ -326,7 +231,7 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
                 </TableHead>
                 <TableBody>
                   {RACE_DISTANCES.map((race, index) => {
-                    const predictedTimeMinutes = predictTime(race.meters, activePI);
+                    const predictedTimeMinutes = predictTimeFromPI(race.meters, performanceIndex!);
                     const distanceKm = unitSystem === 'metric' ? race.displayKm! : race.displayMiles!;
                     const distanceUnit = unitSystem === 'metric' ? 'km' : 'mi';
                     const paceUnit = unitSystem === 'metric' ? 'min/km' : 'min/mi';
@@ -345,8 +250,8 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
                     }
 
                     const pace = calculatePace(predictedTimeMinutes, distanceKm);
-                    const formattedTime = formatTime(predictedTimeMinutes);
-                    const formattedPace = formatPace(pace);
+                    const formattedTime = formatTimeFromMinutes(predictedTimeMinutes);
+                    const formattedPace = formatPaceFromMinutes(pace);
 
                     return (
                       <TableRow
@@ -375,10 +280,7 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
                         </TableCell>
                         <TableCell align="right">
                           <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
-                            {formattedPace}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {paceUnit}
+                            {formattedPace} {paceUnit}
                           </Typography>
                         </TableCell>
                       </TableRow>

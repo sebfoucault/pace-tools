@@ -22,6 +22,8 @@ import {
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import TimeInput from './TimeInput';
+import { calculatePerformanceIndex as calcPI, convertDistanceToMeters } from '../utils/performanceIndex';
+import { formatTime as sharedFormatTime, formatPace as sharedFormatPace } from '../utils/formatters';
 
 // Enhanced Watch icon with clock hands - simplified and cleaner
 const WatchWithHands: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSize }) => (
@@ -149,51 +151,14 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
     throw new Error('Invalid pace format');
   };
 
-  // Format time helper function
+  // Format time helper function - uses shared formatter
   const formatTime = useCallback((minutes: number, includeDeciseconds: boolean = false): string => {
-    const hours = Math.floor(minutes / 60);
-    const mins = Math.floor(minutes % 60);
-    const totalSeconds = (minutes % 1) * 60;
-
-    if (includeDeciseconds) {
-      const secs = Math.floor(totalSeconds);
-      const deciseconds = Math.round((totalSeconds % 1) * 10);
-
-      if (deciseconds >= 10) {
-        return formatTime(minutes + 1/60, false);
-      }
-
-      if (hours > 0) {
-        return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}:${deciseconds}`;
-      } else {
-        return `${mins}:${secs.toString().padStart(2, '0')}:${deciseconds}`;
-      }
-    } else {
-      const secs = Math.round(totalSeconds);
-
-      if (secs >= 60) {
-        return formatTime(minutes + 1/60, false);
-      }
-
-      if (hours > 0) {
-        return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-      } else {
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-      }
-    }
+    return sharedFormatTime(minutes, includeDeciseconds);
   }, []);
 
-  // Format pace helper function
+  // Format pace helper function - uses shared formatter
   const formatPace = useCallback((paceInMinutes: number): string => {
-    const mins = Math.floor(paceInMinutes);
-    const totalSeconds = (paceInMinutes % 1) * 60;
-    const secs = Math.round(totalSeconds);
-
-    if (secs >= 60) {
-      return formatPace(paceInMinutes + 1/60);
-    }
-
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return sharedFormatPace(paceInMinutes);
   }, []);
 
   // Auto-calculate whenever inputs change and a field is locked
@@ -508,25 +473,11 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
         return null;
       }
 
-      // Convert distance to meters (assuming input is in km or miles)
-      const distanceInMeters = systemType === 'metric' ? dist * 1000 : dist * 1609.34;
+      // Convert distance to meters using utility
+      const distanceInMeters = convertDistanceToMeters(dist, systemType === 'metric' ? 'km' : 'miles');
 
-      // Calculate velocity in m/min
-      const velocity = distanceInMeters / timeInMinutes;
-
-      // Calculate i = -4.60 + 0.182258 * v + 0.000104 * v^2
-      const i = -4.60 + 0.182258 * velocity + 0.000104 * velocity * velocity;
-
-      // Calculate imax = 0.8 + 0.1894393 * exp(-0.012778 * t) + 0.2989558 * exp(-0.1932605 * t)
-      const imax = 0.8 +
-                   0.1894393 * Math.exp(-0.012778 * timeInMinutes) +
-                   0.2989558 * Math.exp(-0.1932605 * timeInMinutes);
-
-      // Calculate performance index pi = i / imax
-      const pi = i / imax;
-
-      // Return as raw value (not percentage)
-      return Math.max(0, pi);
+      // Calculate performance index using utility function
+      return calcPI(distanceInMeters, timeInMinutes);
     } catch (error) {
       return null;
     }
@@ -750,7 +701,6 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                       onClick={calculateDistance}
                       edge="end"
                       disabled={lockedField !== null}
-                      sx={{ color: '#1b2a41' }}
                       title="Calculate distance from time and pace"
                       aria-label="Calculate distance from time and pace"
                     >
@@ -828,7 +778,6 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                       onClick={calculateTime}
                       edge="end"
                       disabled={lockedField !== null}
-                      sx={{ color: '#1b2a41' }}
                       title="Calculate time from distance and pace"
                       aria-label="Calculate time from distance and pace"
                     >
@@ -935,7 +884,6 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
                       onClick={calculatePace}
                       edge="end"
                       disabled={lockedField !== null}
-                      sx={{ color: '#1b2a41' }}
                       title="Calculate pace from distance and time"
                       aria-label="Calculate pace from distance and time"
                     >
