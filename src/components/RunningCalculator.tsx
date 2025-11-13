@@ -303,9 +303,9 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
   const getDistanceChips = () => {
     if (systemType === 'metric') {
       return [
-        { label: '1 km', value: 1 },
-        { label: '5 km', value: 5 },
-        { label: '10 km', value: 10 },
+        { label: '1k', value: 1 },
+        { label: '5k', value: 5 },
+        { label: '10k', value: 10 },
         { label: '21k', value: 21.0975 },
         { label: '42k', value: 42.195 },
       ];
