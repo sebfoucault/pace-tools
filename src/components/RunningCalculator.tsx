@@ -22,6 +22,7 @@ import {
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import TimeInput from './TimeInput';
+import PerformanceGauge from './PerformanceGauge';
 import { calculatePerformanceIndex as calcPI, convertDistanceToMeters } from '../utils/performanceIndex';
 import { formatTime as sharedFormatTime, formatPace as sharedFormatPace } from '../utils/formatters';
 import type { UnitSystem, CalculationInputs, UnitSystemConfig, LockableField } from '../types';
@@ -494,160 +495,10 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({ unitSystem: syste
             {t('calculator.title')}
           </Typography>
 
-          {(() => {
-            if (performanceIndex === null) {
-              // Display N/A when PI cannot be calculated
-              return (
-                <Box
-                  sx={{
-                    position: 'relative',
-                    width: 80,
-                    height: 80,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  title={t('calculator.performanceIndexTooltip') || 'Performance Index: Calculated from distance and time'}
-                >
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '50%',
-                      border: '6px solid rgba(0, 0, 0, 0.1)',
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      position: 'relative',
-                      fontSize: '1.1rem',
-                      fontWeight: 600,
-                      color: '#9e9e9e',
-                      zIndex: 1,
-                    }}
-                  >
-                    N/A
-                  </Typography>
-                </Box>
-              );
-            }
-
-            // Gauge range based on marathon benchmarks:
-            // - Lowest: 5h00 marathon = PI ~29
-            // - Highest: 1h55 marathon = PI ~90
-            const minPI = 29;
-            const maxPI = 90;
-
-            // Cap the displayed performance index at 100 to avoid infinity display
-            const displayPI = Math.min(100, performanceIndex);
-            const gaugePercentage = Math.max(0, Math.min(100, ((displayPI - minPI) / (maxPI - minPI)) * 100));
-
-            // Gauge: Arc from 7 o'clock (left) to 5 o'clock (right) going through the TOP
-            // This creates a 300° arc that avoids the bottom section (6 o'clock)
-            const radius = 34;
-            const centerX = 40;
-            const centerY = 40;
-
-            // 7 o'clock = 210°, 5 o'clock = 150°
-            // Going clockwise from 210° to 150° = 300° (through 9, 12, 3 o'clock)
-            const startAngleDeg = 210; // Start at 7 o'clock on the LEFT
-            const totalArcDegrees = 300; // Span 300° to reach 5 o'clock on the RIGHT (going the long way)
-
-            // Helper: convert angle to cartesian (0° = 3 o'clock, goes clockwise)
-            const polarToCartesian = (angleInDegrees: number) => {
-              const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
-              return {
-                x: centerX + radius * Math.cos(angleInRadians),
-                y: centerY + radius * Math.sin(angleInRadians),
-              };
-            };
-
-            // Create arc path from start angle spanning given degrees clockwise
-            const createArcPath = (arcDegrees: number) => {
-              const start = polarToCartesian(startAngleDeg);
-              const end = polarToCartesian(startAngleDeg + arcDegrees);
-
-              // Use large arc flag for arcs > 180°
-              const largeArcFlag = arcDegrees > 180 ? '1' : '0';
-
-              return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
-            };
-
-            // Calculate how many degrees to fill based on percentage
-            const filledArcDegrees = (totalArcDegrees * gaugePercentage) / 100;            // Color based on performance level (use displayPI for color)
-            const gaugeColor = displayPI >= 70
-              ? '#4caf50'  // Green for excellent
-              : displayPI >= 55
-              ? '#42a5f5'  // Blue for good
-              : displayPI >= 40
-              ? '#ff9800'  // Orange for moderate
-              : '#f44336'; // Red for low
-
-            return (
-              <Box
-                sx={{
-                  position: 'relative',
-                  width: 80,
-                  height: 80,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                title={t('calculator.performanceIndexTooltip') || 'Performance Index: Calculated from distance and time'}
-              >
-                {/* SVG with arcs */}
-                <svg
-                  width="80"
-                  height="80"
-                  style={{ position: 'absolute' }}
-                >
-                  {/* Thin inner circle for decoration */}
-                  <circle
-                    cx={centerX}
-                    cy={centerY}
-                    r={radius - 8}
-                    fill="none"
-                    stroke="rgba(0, 0, 0, 0.12)"
-                    strokeWidth="1"
-                  />
-
-                  {/* Gray background arc - full 300° */}
-                  <path
-                    d={createArcPath(totalArcDegrees)}
-                    fill="none"
-                    stroke="rgba(0, 0, 0, 0.1)"
-                    strokeWidth="6"
-                    strokeLinecap="round"
-                  />
-
-                  {/* Colored arc - filled portion */}
-                  {gaugePercentage > 0 && (
-                    <path
-                      d={createArcPath(filledArcDegrees)}
-                      fill="none"
-                      stroke={gaugeColor}
-                      strokeWidth="6"
-                      strokeLinecap="round"
-                    />
-                  )}
-                </svg>
-
-                {/* Performance index value - display capped at 100 */}
-                <Typography
-                  sx={{
-                    position: 'relative',
-                    fontSize: '1.2rem',
-                    fontWeight: 700,
-                    color: '#1b2a41',
-                    zIndex: 1,
-                  }}
-                >
-                  {displayPI.toFixed(1)}
-                </Typography>
-              </Box>
-            );
-          })()}
+          <PerformanceGauge
+            performanceIndex={performanceIndex}
+            tooltip={t('calculator.performanceIndexTooltip') || 'Performance Index: Calculated from distance and time'}
+          />
         </Box>
 
         <Grid container spacing={4}>

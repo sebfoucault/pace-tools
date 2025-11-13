@@ -14,6 +14,7 @@ import {
   Alert,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import PerformanceGauge from './PerformanceGauge';
 import { predictTimeFromPI } from '../utils/performanceIndex';
 import { formatTimeFromMinutes, formatPaceFromMinutes } from '../utils/formatters';
 import type { UnitSystem, RaceDistance } from '../types';
@@ -58,142 +59,7 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
             {t('racePredictor.title') || 'Race Predictor'}
           </Typography>
 
-          {/* Performance Index Gauge */}
-          {(() => {
-            if (performanceIndex === null || performanceIndex <= 0) {
-              // Display N/A when PI cannot be calculated
-              return (
-                <Box
-                  sx={{
-                    position: 'relative',
-                    width: 80,
-                    height: 80,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  aria-label="Performance Index not available"
-                >
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '50%',
-                      border: '6px solid rgba(0, 0, 0, 0.1)',
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      position: 'relative',
-                      fontSize: '1.1rem',
-                      fontWeight: 600,
-                      color: '#9e9e9e',
-                      zIndex: 1,
-                    }}
-                  >
-                    N/A
-                  </Typography>
-                </Box>
-              );
-            }
-
-            // Gauge range based on marathon benchmarks
-            const minPI = 29;
-            const maxPI = 90;
-
-            // Cap the displayed performance index at 100
-            const displayPI = Math.min(100, performanceIndex);
-            const gaugePercentage = Math.max(0, Math.min(100, ((displayPI - minPI) / (maxPI - minPI)) * 100));
-
-            // Gauge: Arc from 7 o'clock to 5 o'clock (300° arc)
-            const radius = 34;
-            const centerX = 40;
-            const centerY = 40;
-            const startAngleDeg = 210;
-            const totalArcDegrees = 300;
-
-            const polarToCartesian = (angleInDegrees: number) => {
-              const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
-              return {
-                x: centerX + radius * Math.cos(angleInRadians),
-                y: centerY + radius * Math.sin(angleInRadians),
-              };
-            };
-
-            const createArcPath = (arcDegrees: number) => {
-              const start = polarToCartesian(startAngleDeg);
-              const end = polarToCartesian(startAngleDeg + arcDegrees);
-              const largeArcFlag = arcDegrees > 180 ? '1' : '0';
-              return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
-            };
-
-            const filledArcDegrees = (totalArcDegrees * gaugePercentage) / 100;
-
-            const gaugeColor = displayPI >= 70
-              ? '#4caf50'
-              : displayPI >= 55
-              ? '#42a5f5'
-              : displayPI >= 40
-              ? '#ff9800'
-              : '#f44336';
-
-            return (
-              <Box
-                sx={{
-                  position: 'relative',
-                  width: 80,
-                  height: 80,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                aria-label={`Performance Index: ${displayPI.toFixed(1)}`}
-              >
-                <svg
-                  width="80"
-                  height="80"
-                  style={{ position: 'absolute' }}
-                >
-                  <circle
-                    cx={centerX}
-                    cy={centerY}
-                    r={radius - 8}
-                    fill="none"
-                    stroke="rgba(0, 0, 0, 0.12)"
-                    strokeWidth="1"
-                  />
-                  <path
-                    d={createArcPath(totalArcDegrees)}
-                    fill="none"
-                    stroke="rgba(0, 0, 0, 0.1)"
-                    strokeWidth="6"
-                    strokeLinecap="round"
-                  />
-                  {gaugePercentage > 0 && (
-                    <path
-                      d={createArcPath(filledArcDegrees)}
-                      fill="none"
-                      stroke={gaugeColor}
-                      strokeWidth="6"
-                      strokeLinecap="round"
-                    />
-                  )}
-                </svg>
-                <Typography
-                  sx={{
-                    position: 'relative',
-                    fontSize: '1.2rem',
-                    fontWeight: 700,
-                    color: '#1b2a41',
-                    zIndex: 1,
-                  }}
-                >
-                  {displayPI.toFixed(1)}
-                </Typography>
-              </Box>
-            );
-          })()}
+          <PerformanceGauge performanceIndex={performanceIndex} />
         </Box>
 
         {performanceIndex === null || performanceIndex <= 0 ? (
