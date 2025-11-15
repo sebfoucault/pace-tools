@@ -15,14 +15,11 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Chip,
   Divider,
 } from '@mui/material';
 import {
   Close,
   ExpandMore,
-  Straighten,
-  Watch,
   Lock,
   LockOpen,
   Calculate,
@@ -30,48 +27,6 @@ import {
   Speed,
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-
-// Enhanced Watch icon with clock hands - simplified and cleaner
-const WatchWithHands: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSize }) => (
-  <Box sx={{ position: 'relative', display: 'inline-flex', ...sx }}>
-    <Watch sx={{ fontSize }} />
-    {/* Hour hand */}
-    <Box
-      sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        width: '25%',
-        height: '1.5px',
-        backgroundColor: 'currentColor',
-        transformOrigin: '0% 50%',
-        transform: 'rotate(-50deg)',
-        opacity: 0.85,
-      }}
-    />
-    {/* Minute hand */}
-    <Box
-      sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        width: '35%',
-        height: '1px',
-        backgroundColor: 'currentColor',
-        transformOrigin: '0% 50%',
-        transform: 'rotate(110deg)',
-        opacity: 0.85,
-      }}
-    />
-  </Box>
-);
-
-// Gauge icon similar to Performance Index gauge
-const GaugeIcon: React.FC<{ sx?: any; fontSize?: string }> = ({ sx, fontSize }) => (
-  <Box sx={{ position: 'relative', display: 'inline-flex', ...sx }}>
-    <Speed sx={{ fontSize }} />
-  </Box>
-);
 
 interface HelpDialogProps {
   open: boolean;
@@ -116,21 +71,21 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
             </Typography>
             <List dense>
               <ListItem>
-                <ListItemIcon><Straighten sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Calculate sx={{ color: '#1b2a41' }} /></ListItemIcon>
                 <ListItemText
                   primary={t('help.distanceCalc') || 'Distance Calculation'}
                   secondary={t('help.distanceCalcDesc') || 'Enter time and pace, then click the distance calculate button'}
                 />
               </ListItem>
               <ListItem>
-                <ListItemIcon><WatchWithHands sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Calculate sx={{ color: '#1b2a41' }} /></ListItemIcon>
                 <ListItemText
                   primary={t('help.timeCalc') || 'Time Calculation'}
                   secondary={t('help.timeCalcDesc') || 'Enter distance and pace, then click the time calculate button'}
                 />
               </ListItem>
               <ListItem>
-                <ListItemIcon><GaugeIcon sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Calculate sx={{ color: '#1b2a41' }} /></ListItemIcon>
                 <ListItemText
                   primary={t('help.paceCalc') || 'Pace Calculation'}
                   secondary={t('help.paceCalcDesc') || 'Enter distance and time, then click the pace calculate button'}
@@ -144,13 +99,12 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
           <AccordionSummary expandIcon={<ExpandMore />}>
             <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
               <Lock sx={{ mr: 1 }} />
-              {t('help.lockFeature') || 'Lock Feature (Auto-Calculation)'}
-              <Chip label={t('help.advanced') || 'Advanced'} size="small" color="secondary" sx={{ ml: 1 }} />
+              {t('help.autoCalculation') || 'Auto-Calculation Mode'}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant="body2" paragraph>
-              {t('help.lockDescription') || 'The lock feature allows automatic calculation as you type. When you lock a field, it becomes constant and other fields are calculated automatically.'}
+              {t('help.autoDescription') || 'In auto mode, lock a field to keep it constant while automatically calculating the other fields as you type.'}
             </Typography>
 
             <Box sx={{ mb: 2 }}>
@@ -168,14 +122,14 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
                   <ListItemText primary={t('help.step2') || 'The locked field becomes constant (shown with a filled lock icon)'} />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon><GaugeIcon fontSize="small" sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                  <ListItemIcon><Calculate fontSize="small" sx={{ color: '#1b2a41' }} /></ListItemIcon>
                   <ListItemText primary={t('help.step3') || 'Type values in the other fields - calculations happen instantly!'} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon><Info fontSize="small" sx={{ color: '#666' }} /></ListItemIcon>
                   <ListItemText
-                    primary={t('help.lockProtection') || 'Locked fields are protected and visually disabled'}
-                    secondary={t('help.lockProtectionDesc') || 'You can only lock fields with values. Locked fields appear grayed out and cannot be edited. Associated chips are also disabled. The lock is automatically released if the field becomes empty.'}
+                    primary={t('help.lockProtection') || 'Locked fields are protected in auto mode'}
+                    secondary={t('help.lockProtectionDesc') || 'You can only lock fields with values. In auto mode, locked fields appear grayed out and cannot be edited. Switch to manual mode to edit any field. The lock is automatically released if the field becomes empty.'}
                   />
                 </ListItem>
               </List>
@@ -189,21 +143,21 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
               </Typography>
               <List dense>
                 <ListItem>
-                  <ListItemIcon><Straighten sx={{ color: '#324a5f' }} /></ListItemIcon>
+                  <ListItemIcon><Lock sx={{ color: '#324a5f' }} /></ListItemIcon>
                   <ListItemText
                     primary={t('help.lockDistanceTitle') || 'Lock Distance'}
                     secondary={t('help.lockDistanceDesc') || 'Distance stays constant. Change time or pace to calculate the other.'}
                   />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon><WatchWithHands sx={{ color: '#324a5f' }} /></ListItemIcon>
+                  <ListItemIcon><Lock sx={{ color: '#324a5f' }} /></ListItemIcon>
                   <ListItemText
                     primary={t('help.lockTimeTitle') || 'Lock Time'}
                     secondary={t('help.lockTimeDesc') || 'Time stays constant. Change distance or pace to calculate the other.'}
                   />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon><GaugeIcon sx={{ color: '#324a5f' }} /></ListItemIcon>
+                  <ListItemIcon><Lock sx={{ color: '#324a5f' }} /></ListItemIcon>
                   <ListItemText
                     primary={t('help.lockPaceTitle') || 'Lock Pace'}
                     secondary={t('help.lockPaceDesc') || 'Pace stays constant. Change distance or time to calculate the other.'}
@@ -258,6 +212,65 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
 
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
+            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
+              <Speed sx={{ mr: 1 }} />
+              {t('help.racePredictor') || 'Race Predictor'}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography variant="body2" paragraph>
+              {t('help.racePredictorDesc') || 'The Race Predictor uses Jack Daniels\' Running Formula to predict your race times at different distances based on your current performance.'}
+            </Typography>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                {t('help.racePredictorHow') || 'How it works:'}
+              </Typography>
+              <Typography variant="body2" paragraph>
+                {t('help.racePredictorSteps') || 'Enter a distance and time in the Calculator tab. The app calculates your Performance Index (PI) and predicts times for standard race distances.'}
+              </Typography>
+            </Box>
+
+            <Box sx={{
+              backgroundColor: '#f5f5f5',
+              p: 2,
+              borderRadius: 1,
+              border: '1px solid #e0e0e0',
+              mb: 2
+            }}>
+              <Typography variant="subtitle2" gutterBottom>
+                {t('help.racePredictorFormula') || 'The Formula:'}
+              </Typography>
+              <Box sx={{ my: 2, fontFamily: 'serif', fontSize: '1rem', lineHeight: 2 }}>
+                <Box sx={{ mb: 1.5 }}>
+                  <Typography component="div" sx={{ fontFamily: 'serif', fontSize: '1rem' }}>
+                    <i>i</i> = -4.60 + 0.182258<i>v</i> + 0.000104<i>v</i><sup>2</sup>
+                  </Typography>
+                </Box>
+                <Box sx={{ mb: 1.5 }}>
+                  <Typography component="div" sx={{ fontFamily: 'serif', fontSize: '1rem' }}>
+                    <i>i</i><sub>max</sub> = 0.8 + 0.1894393<i>e</i><sup>-0.012778<i>t</i></sup> + 0.2989558<i>e</i><sup>-0.1932605<i>t</i></sup>
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography component="div" sx={{ fontFamily: 'serif', fontSize: '1rem' }}>
+                    PI = (<i>i</i> / <i>i</i><sub>max</sub>) × 100
+                  </Typography>
+                </Box>
+              </Box>
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                {t('help.racePredictorFormulaDesc') || 'where v is velocity (m/min), t is time (minutes), i is intensity, and PI is Performance Index'}
+              </Typography>
+            </Box>
+
+            <Typography variant="body2" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
+              {t('help.racePredictorNote') || 'Note: Predictions assume similar training, conditions, and effort level. Actual results may vary.'}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMore />}>
             <Typography variant="h6">
               {t('help.tips') || 'Tips & Tricks'}
             </Typography>
@@ -266,7 +279,7 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
             <List dense>
               <ListItem>
                 <ListItemIcon><Info sx={{ color: '#1b2a41' }} /></ListItemIcon>
-                <ListItemText primary={t('help.tip1') || 'Use the lock feature for quick "what-if" scenarios - lock your target pace and see how distance affects time.'} />
+                <ListItemText primary={t('help.tip1') || 'Use auto mode with locked fields for quick "what-if" scenarios - lock your target pace and see how distance affects time.'} />
               </ListItem>
               <ListItem>
                 <ListItemIcon><Info sx={{ color: '#1b2a41' }} /></ListItemIcon>
@@ -274,11 +287,15 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
               </ListItem>
               <ListItem>
                 <ListItemIcon><Info sx={{ color: '#1b2a41' }} /></ListItemIcon>
-                <ListItemText primary={t('help.tip3') || 'The Speed ↔ Pace Converter at the bottom helps convert between different pace and speed units.'} />
+                <ListItemText primary={t('help.tip3') || 'Switch to manual mode if you need to edit a locked field, then switch back to auto mode to continue auto-calculation.'} />
               </ListItem>
               <ListItem>
                 <ListItemIcon><Info sx={{ color: '#1b2a41' }} /></ListItemIcon>
-                <ListItemText primary={t('help.tip4') || 'Switch between metric and imperial units in the settings to match your preference.'} />
+                <ListItemText primary={t('help.tip4') || 'The Speed ↔ Pace Converter helps convert between pace (min/km or min/mi) and speed (km/h or mph).'} />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon><Info sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemText primary={t('help.tip5') || 'Switch between metric and imperial units in the settings to match your preference.'} />
               </ListItem>
             </List>
           </AccordionDetails>

@@ -53,14 +53,14 @@ describe('RunningCalculator - Calculation Bug Tests', () => {
     fireEvent.click(distanceCalcButton);
 
     // Should calculate distance = 50 / 5 = 10
-    expect(distanceInput).toHaveValue(10.00);
+    expect(distanceInput).toHaveValue('10.00');
 
     // Step 2: Change time and recalculate distance
     fireEvent.change(timeInput, { target: { value: '40:00' } });
     fireEvent.click(distanceCalcButton);
 
     // Should recalculate distance = 40 / 5 = 8
-    expect(distanceInput).toHaveValue(8.00);
+    expect(distanceInput).toHaveValue('8.00');
   });
 
   test('recalculates pace when distance changes after initial calculation', () => {

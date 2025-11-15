@@ -310,12 +310,19 @@ describe('RunningCalculator - Calculator Mode Toggle', () => {
       const lockButtons = screen.getAllByLabelText(/lock/i);
       fireEvent.click(lockButtons[0]);
 
+      // In auto mode, locked field should be disabled
+      expect(distanceInput).toBeDisabled();
+
       // Switch to manual mode
       const manualButton = screen.getByRole('button', { name: /manual mode/i });
       fireEvent.click(manualButton);
 
-      // Distance field should still be disabled (locked)
-      expect(distanceInput).toBeDisabled();
+      // In manual mode, field should be editable even if lock state is preserved
+      expect(distanceInput).not.toBeDisabled();
+
+      // Should be able to edit the field in manual mode
+      fireEvent.change(distanceInput, { target: { value: '15' } });
+      expect(distanceInput.value).toBe('15');
     });
   });
 

@@ -128,8 +128,9 @@ const SpeedPaceConverter: React.FC<SpeedPaceConverterProps> = ({ unitSystem }) =
             <SwapVert
               sx={{
                 fontSize: 40,
-                color: '#1976d2',
+                color: 'action.active',
                 animation: 'pulse 2s ease-in-out infinite',
+                transform: 'rotate(90deg)',
                 '@keyframes pulse': {
                   '0%, 100%': { opacity: 0.6 },
                   '50%': { opacity: 1 },
