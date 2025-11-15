@@ -5,19 +5,19 @@ import PerformanceGauge from '../PerformanceGauge';
 
 describe('PerformanceGauge Component', () => {
   describe('Display Tests', () => {
-    it('should render N/A when performance index is null', () => {
+    it('should render a subtle dash when performance index is null', () => {
       render(<PerformanceGauge performanceIndex={null} />);
-      expect(screen.getByText('N/A')).toBeInTheDocument();
+      expect(screen.getByText('—')).toBeInTheDocument();
     });
 
-    it('should render N/A when performance index is zero', () => {
+    it('should render a subtle dash when performance index is zero', () => {
       render(<PerformanceGauge performanceIndex={0} />);
-      expect(screen.getByText('N/A')).toBeInTheDocument();
+      expect(screen.getByText('—')).toBeInTheDocument();
     });
 
-    it('should render N/A when performance index is negative', () => {
+    it('should render a subtle dash when performance index is negative', () => {
       render(<PerformanceGauge performanceIndex={-5} />);
-      expect(screen.getByText('N/A')).toBeInTheDocument();
+      expect(screen.getByText('—')).toBeInTheDocument();
     });
 
     it('should display performance index value with one decimal place', () => {
@@ -63,10 +63,10 @@ describe('PerformanceGauge Component', () => {
       expect(svg).toBeInTheDocument();
     });
 
-    it('should not render SVG gauge when performance index is null', () => {
+    it('should render SVG gauge even when performance index is null', () => {
       const { container } = render(<PerformanceGauge performanceIndex={null} />);
       const svg = container.querySelector('svg');
-      expect(svg).not.toBeInTheDocument();
+      expect(svg).toBeInTheDocument();
     });
 
     it('should render background arc', () => {

@@ -35,51 +35,14 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
   ariaLabel,
 }) => {
   const maskId = React.useId();
-  // Display N/A when PI is not available
-  if (performanceIndex === null || performanceIndex <= 0) {
-    return (
-      <Box
-        sx={{
-          position: 'relative',
-          width: size,
-          height: size,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        title={tooltip}
-        aria-label={ariaLabel || 'Performance Index not available'}
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-            border: `6px solid ${tokens.gaugeBackgroundArcStroke}`,
-          }}
-        />
-        <Typography
-          sx={{
-            position: 'relative',
-            fontSize: `${size * 0.015}rem`,
-            fontWeight: 600,
-            color: tokens.gaugeNeutralText,
-            zIndex: 1,
-          }}
-        >
-          N/A
-        </Typography>
-      </Box>
-    );
-  }
+  const isNA = performanceIndex === null || performanceIndex <= 0;
 
   // Gauge range based on marathon benchmarks
   const minPI = 29;
   const maxPI = 90;
 
   // Cap the displayed performance index at 100
-  const displayPI = Math.min(100, performanceIndex);
+  const displayPI = Math.min(100, performanceIndex ?? 0);
   const gaugePercentage = Math.max(0, Math.min(100, ((displayPI - minPI) / (maxPI - minPI)) * 100));
 
   // Gauge: Arc from 7 o'clock to 5 o'clock (300° arc)
@@ -126,7 +89,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
         justifyContent: 'center',
       }}
       title={tooltip}
-      aria-label={ariaLabel || `Performance Index: ${displayPI.toFixed(1)}`}
+      aria-label={ariaLabel || (isNA ? 'Performance Index not available' : `Performance Index: ${displayPI.toFixed(1)}`)}
     >
       <svg
         width={size}
@@ -150,7 +113,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
             * Draw black arc shortened by half the gap.
             * Draw grey arc starting after the gap so a thin space remains visible.
         */}
-        {gaugePercentage <= 0 ? (
+        {isNA || gaugePercentage <= 0 ? (
           <path
             d={createArcPath(totalArcDegrees)}
             fill="none"
@@ -252,11 +215,11 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
           position: 'relative',
           fontSize: `${size * 0.015}rem`,
           fontWeight: 700,
-          color: tokens.headerColor,
+          color: isNA ? tokens.gaugeNeutralText : tokens.headerColor,
           zIndex: 1,
         }}
       >
-        {displayPI.toFixed(1)}
+        {isNA ? '—' : displayPI.toFixed(1)}
       </Typography>
     </Box>
   );

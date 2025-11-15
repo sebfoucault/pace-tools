@@ -9,13 +9,12 @@
     - For persisting user preferences
     - For persisting last values
 - Improve Performance Gauge
-    - Remove color banding - DONE
-    - Improve drawing - DONE
+    - Remove color banding                              - DONE
+    - Improve drawing                                   - DONE
 - Improve overall layout
-- Chips
-    - Add support for continous increment/decrement on hold
+- Chips - Add support for continous incr/dec
 - Add training paces
 
 ## Technical
-- Rationalize styling - DONE
-- Rationalize unit tests - DONE
+- Rationalize styling                                   - DONE
+- Rationalize unit tests                                - DONE
