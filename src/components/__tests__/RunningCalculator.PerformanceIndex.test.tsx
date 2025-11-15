@@ -8,7 +8,7 @@ describe('RunningCalculator - Performance Index', () => {
     render(<RunningCalculator unitSystem="metric" />);
     const gauge = screen.getByTitle(/performanceIndex/i);
     expect(gauge).toBeInTheDocument();
-    expect(gauge).toHaveTextContent('N/A');
+    expect(gauge).toHaveTextContent('—');
   });
 
   test('performance index badge appears when distance and time are filled', () => {
