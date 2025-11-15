@@ -26,7 +26,7 @@ jobs:
           node-version: '24.x' # change to your Node.js version
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install --no-audit --no-fund
 
       - name: Run tests
         run: npm test -- --watchAll=false
@@ -38,5 +38,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.PAT }}
-          publish_dir: ./build
+          publish_dir: ./dist
           publish_branch: gh-pages-rel
