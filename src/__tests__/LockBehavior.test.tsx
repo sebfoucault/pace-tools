@@ -4,12 +4,23 @@ import '@testing-library/jest-dom';
 import RunningCalculator from '../components/RunningCalculator';
 
 describe('RunningCalculator - Lock Behavior', () => {
-  test('calculate buttons are disabled when any field is locked', () => {
+  // Helper function to switch to auto mode
+  const switchToAutoMode = () => {
+    const autoModeButton = screen.getByRole('button', { name: /auto mode/i });
+    fireEvent.click(autoModeButton);
+  };
+
+  test('calculate buttons are disabled when any field is locked in manual mode', () => {
     render(<RunningCalculator unitSystem="metric" />);
+
+    // In manual mode by default - calculate buttons should be visible
 
     // Fill in distance field first
     const distanceInput = screen.getByLabelText(/calculator.distance/i);
     fireEvent.change(distanceInput, { target: { value: '10' } });
+
+    // Switch to auto mode and lock a field
+    switchToAutoMode();
 
     // Get lock buttons
     const lockButtons = screen.getAllByLabelText(/lock/i);
@@ -17,6 +28,10 @@ describe('RunningCalculator - Lock Behavior', () => {
 
     // Lock the distance field
     fireEvent.click(distanceLockButton);
+
+    // Switch back to manual mode to see calculate buttons
+    const manualModeButton = screen.getByRole('button', { name: /manual mode/i });
+    fireEvent.click(manualModeButton);
 
     // Find calculate buttons by their aria-labels
     const calculateDistanceButton = screen.getByLabelText('Calculate distance from time and pace');
@@ -31,6 +46,9 @@ describe('RunningCalculator - Lock Behavior', () => {
 
   test('adjustment chips are disabled when their field is locked', () => {
     render(<RunningCalculator unitSystem="metric" />);
+
+    // Switch to auto mode to access lock functionality
+    switchToAutoMode();
 
     // Fill in time and pace first
     const timeInput = screen.getByLabelText(/calculator.time/i);
@@ -65,6 +83,9 @@ describe('RunningCalculator - Lock Behavior', () => {
   test('calculate buttons are re-enabled when lock is released', () => {
     render(<RunningCalculator unitSystem="metric" />);
 
+    // Switch to auto mode to access lock functionality
+    switchToAutoMode();
+
     // Fill in distance field first
     const distanceInput = screen.getByLabelText(/calculator.distance/i);
     fireEvent.change(distanceInput, { target: { value: '10' } });
@@ -76,12 +97,22 @@ describe('RunningCalculator - Lock Behavior', () => {
     // Lock the distance field
     fireEvent.click(distanceLockButton);
 
+    // Switch to manual mode to see calculate buttons
+    const manualModeButton = screen.getByRole('button', { name: /manual mode/i });
+    fireEvent.click(manualModeButton);
+
     // Calculate buttons should be disabled
     const calculateDistanceButton = screen.getByLabelText('Calculate distance from time and pace');
     expect(calculateDistanceButton).toBeDisabled();
 
+    // Switch back to auto mode to unlock
+    switchToAutoMode();
+
     // Unlock the field
     fireEvent.click(distanceLockButton);
+
+    // Switch to manual mode to check calculate buttons
+    fireEvent.click(manualModeButton);
 
     // Calculate buttons should be enabled again
     expect(calculateDistanceButton).not.toBeDisabled();
@@ -98,6 +129,16 @@ describe('RunningCalculator - Lock Behavior', () => {
     fireEvent.change(timeInput, { target: { value: '50:00' } });
     fireEvent.blur(timeInput);
 
+    // In manual mode, calculate buttons should be enabled
+    let calculateDistanceButton = screen.getByLabelText('Calculate distance from time and pace');
+    let calculateTimeButton = screen.getByLabelText('Calculate time from distance and pace');
+
+    expect(calculateDistanceButton).not.toBeDisabled();
+    expect(calculateTimeButton).not.toBeDisabled();
+
+    // Switch to auto mode to access lock buttons
+    switchToAutoMode();
+
     // Get lock buttons
     const lockButtons = screen.getAllByLabelText(/lock/i);
     const distanceLockButton = lockButtons[0];
@@ -106,22 +147,36 @@ describe('RunningCalculator - Lock Behavior', () => {
     // Lock distance
     fireEvent.click(distanceLockButton);
 
-    const calculateDistanceButton = screen.getByLabelText('Calculate distance from time and pace');
-    const calculateTimeButton = screen.getByLabelText('Calculate time from distance and pace');
+    // Switch back to manual mode to check calculate buttons
+    const manualModeButton = screen.getByRole('button', { name: /manual mode/i });
+    fireEvent.click(manualModeButton);
+
+    calculateDistanceButton = screen.getByLabelText('Calculate distance from time and pace');
+    calculateTimeButton = screen.getByLabelText('Calculate time from distance and pace');
 
     expect(calculateDistanceButton).toBeDisabled();
     expect(calculateTimeButton).toBeDisabled();
 
-    // Switch to time lock
+    // Switch back to auto mode, switch to time lock
+    switchToAutoMode();
     fireEvent.click(timeLockButton);
 
+    // Switch to manual mode to check again
+    fireEvent.click(manualModeButton);
+
     // Calculate buttons should still be disabled
+    calculateDistanceButton = screen.getByLabelText('Calculate distance from time and pace');
+    calculateTimeButton = screen.getByLabelText('Calculate time from distance and pace');
+
     expect(calculateDistanceButton).toBeDisabled();
     expect(calculateTimeButton).toBeDisabled();
   });
 
   test('distance chips are disabled when distance field is locked', () => {
     render(<RunningCalculator unitSystem="metric" />);
+
+    // Switch to auto mode to access lock functionality
+    switchToAutoMode();
 
     // Fill in and lock distance field
     const distanceInput = screen.getByLabelText(/calculator.distance/i) as HTMLInputElement;
@@ -141,6 +196,9 @@ describe('RunningCalculator - Lock Behavior', () => {
 
   test('adjustment chips do not work when their field is locked', () => {
     render(<RunningCalculator unitSystem="metric" />);
+
+    // Switch to auto mode to access lock functionality
+    switchToAutoMode();
 
     // Fill in time and pace
     const timeInput = screen.getByLabelText(/calculator.time/i);
@@ -173,6 +231,9 @@ describe('RunningCalculator - Lock Behavior', () => {
   test('locked field cannot be edited manually', () => {
     render(<RunningCalculator unitSystem="metric" />);
 
+    // Switch to auto mode to access lock functionality
+    switchToAutoMode();
+
     // Fill in distance field
     const distanceInput = screen.getByLabelText(/calculator.distance/i) as HTMLInputElement;
     fireEvent.change(distanceInput, { target: { value: '10' } });
@@ -192,6 +253,9 @@ describe('RunningCalculator - Lock Behavior', () => {
   test('lock button is disabled when field is empty', () => {
     render(<RunningCalculator unitSystem="metric" />);
 
+    // Switch to auto mode to access lock functionality
+    switchToAutoMode();
+
     // Get lock buttons
     const lockButtons = screen.getAllByLabelText(/lock/i);
     const distanceLockButton = lockButtons[0];
@@ -209,6 +273,9 @@ describe('RunningCalculator - Lock Behavior', () => {
 
   test('lock is automatically released when locked field becomes empty', () => {
     render(<RunningCalculator unitSystem="metric" />);
+
+    // Switch to auto mode to access lock functionality
+    switchToAutoMode();
 
     // Fill in distance and time
     const distanceInput = screen.getByLabelText(/calculator.distance/i) as HTMLInputElement;
@@ -241,6 +308,9 @@ describe('RunningCalculator - Lock Behavior', () => {
   test('distance chips cannot modify locked field value', () => {
     render(<RunningCalculator unitSystem="metric" />);
 
+    // Switch to auto mode to access lock functionality
+    switchToAutoMode();
+
     // Fill in distance
     const distanceInput = screen.getByLabelText(/calculator.distance/i) as HTMLInputElement;
     fireEvent.change(distanceInput, { target: { value: '5' } });
@@ -259,6 +329,9 @@ describe('RunningCalculator - Lock Behavior', () => {
 
   test('locked fields are visually disabled', () => {
     render(<RunningCalculator unitSystem="metric" />);
+
+    // Switch to auto mode to access lock functionality
+    switchToAutoMode();
 
     // Fill in fields
     const distanceInput = screen.getByLabelText(/calculator.distance/i);

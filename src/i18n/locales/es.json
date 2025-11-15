@@ -44,7 +44,11 @@
     "lockPace": "Bloquear campo de ritmo",
     "unlockPace": "Desbloquear campo de ritmo",
     "performanceIndex": "Índice de Rendimiento",
-    "performanceIndexTooltip": "Índice de Rendimiento: Calculado a partir de la distancia y el tiempo. Valores más altos indican mejor rendimiento."
+    "performanceIndexTooltip": "Índice de Rendimiento: Calculado a partir de la distancia y el tiempo. Valores más altos indican mejor rendimiento.",
+    "modeManual": "Manual",
+    "modeAuto": "Auto",
+    "modeManualTooltip": "Modo manual: Haz clic en los botones de calcular para obtener valores",
+    "modeAutoTooltip": "Modo automático: Bloquea campos para cálculo automático"
   },
   "converter": {
     "title": "Conversor Velocidad ↔ Ritmo",

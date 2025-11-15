@@ -44,7 +44,11 @@
     "lockPace": "Verrouiller le champ d'allure",
     "unlockPace": "Déverrouiller le champ d'allure",
     "performanceIndex": "Indice de Performance",
-    "performanceIndexTooltip": "Indice de Performance : Calculé à partir de la distance et du temps. Des valeurs plus élevées indiquent de meilleures performances."
+    "performanceIndexTooltip": "Indice de Performance : Calculé à partir de la distance et du temps. Des valeurs plus élevées indiquent de meilleures performances.",
+    "modeManual": "Manuel",
+    "modeAuto": "Auto",
+    "modeManualTooltip": "Mode manuel : Cliquez sur les boutons de calcul pour obtenir les valeurs",
+    "modeAutoTooltip": "Mode automatique : Verrouillez les champs pour un calcul automatique"
   },
   "converter": {
     "title": "Convertisseur Vitesse ↔ Allure",

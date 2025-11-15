@@ -38,7 +38,11 @@
     "lockPace": "Tempofeld sperren",
     "unlockPace": "Tempofeld entsperren",
     "performanceIndex": "Leistungsindex",
-    "performanceIndexTooltip": "Leistungsindex: Berechnet aus Distanz und Zeit. Höhere Werte zeigen bessere Leistung an."
+    "performanceIndexTooltip": "Leistungsindex: Berechnet aus Distanz und Zeit. Höhere Werte zeigen bessere Leistung an.",
+    "modeManual": "Manuell",
+    "modeAuto": "Auto",
+    "modeManualTooltip": "Manueller Modus: Klicken Sie auf Berechnungsschaltflächen, um Werte zu erhalten",
+    "modeAutoTooltip": "Automatischer Modus: Sperren Sie Felder für automatische Berechnung"
   },
   "changeLanguage": "Sprache Ändern",
   "settings": {
