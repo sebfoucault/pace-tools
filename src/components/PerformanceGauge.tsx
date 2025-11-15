@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
+import { tokens } from '../styles/tokens';
 
 interface PerformanceGaugeProps {
   /** Performance Index value to display. Null shows N/A */
@@ -54,7 +55,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
             width: '100%',
             height: '100%',
             borderRadius: '50%',
-            border: '6px solid rgba(0, 0, 0, 0.1)',
+            border: `6px solid ${tokens.gaugeBackgroundArcStroke}`,
           }}
         />
         <Typography
@@ -62,7 +63,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
             position: 'relative',
             fontSize: `${size * 0.015}rem`,
             fontWeight: 600,
-            color: '#9e9e9e',
+            color: tokens.gaugeNeutralText,
             zIndex: 1,
           }}
         >
@@ -108,12 +109,12 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
 
   // Color based on performance level
   const gaugeColor = displayPI >= 70
-    ? '#4caf50'  // Green for excellent
+    ? tokens.gaugeExcellent  // Green for excellent
     : displayPI >= 55
-    ? '#42a5f5'  // Blue for good
+    ? tokens.gaugeGood  // Blue for good
     : displayPI >= 40
-    ? '#ff9800'  // Orange for moderate
-    : '#f44336'; // Red for low
+    ? tokens.gaugeModerate  // Orange for moderate
+    : tokens.gaugeLow; // Red for low
 
   return (
     <Box
@@ -139,7 +140,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
           cy={centerY}
           r={radius - 8}
           fill="none"
-          stroke="rgba(0, 0, 0, 0.12)"
+          stroke={tokens.gaugeInnerCircleStroke}
           strokeWidth="1"
         />
 
@@ -147,7 +148,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
         <path
           d={createArcPath(totalArcDegrees)}
           fill="none"
-          stroke="rgba(0, 0, 0, 0.1)"
+          stroke={tokens.gaugeBackgroundArcStroke}
           strokeWidth="6"
           strokeLinecap="round"
         />
@@ -170,7 +171,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
           position: 'relative',
           fontSize: `${size * 0.015}rem`,
           fontWeight: 700,
-          color: '#1b2a41',
+          color: tokens.headerColor,
           zIndex: 1,
         }}
       >

@@ -9,6 +9,8 @@ import {
 import { SwapVert } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import TimeInput from './TimeInput';
+import { tokens } from '../styles/tokens';
+import presets from '../styles/presets';
 
 interface ConversionState {
   speed: string;
@@ -88,15 +90,12 @@ const SpeedPaceConverter: React.FC<SpeedPaceConverterProps> = ({ unitSystem }) =
 
   return (
     <Card elevation={3}>
-      <CardContent sx={{ p: 3 }}>
+      <CardContent sx={presets.cardContent}>
         <Typography
           variant="h5"
           component="h2"
           gutterBottom
-          sx={{
-            color: '#1b2a41',
-            mb: 3,
-          }}
+          sx={{ ...presets.title, mb: 3 }}
         >
           {t('converter.title')}
         </Typography>
@@ -113,7 +112,7 @@ const SpeedPaceConverter: React.FC<SpeedPaceConverterProps> = ({ unitSystem }) =
               placeholder={unitSystem === 'metric' ? '12.0' : '7.5'}
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  backgroundColor: 'white',
+                  backgroundColor: 'background.paper',
                 },
               }}
             />
@@ -169,7 +168,7 @@ const SpeedPaceConverter: React.FC<SpeedPaceConverterProps> = ({ unitSystem }) =
               placeholder="5:00"
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  backgroundColor: 'white',
+                  backgroundColor: 'background.paper',
                 },
               }}
             />

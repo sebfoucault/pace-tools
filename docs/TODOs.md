@@ -15,5 +15,5 @@
     - Add support for continous increment/decrement on hold
 
 ## Technical
-- Rationalize styling
+- Rationalize styling - DONE
 - Rationalize unit tests

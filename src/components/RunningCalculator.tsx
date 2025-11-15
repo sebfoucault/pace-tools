@@ -24,6 +24,8 @@ import { ChipsBar, type ChipOption } from './ChipsBar';
 import { useCalculatorMachine, type FieldName } from '../hooks/useCalculatorMachine';
 import { usePerformanceIndex } from '../hooks/usePerformanceIndex';
 import type { UnitSystem, UnitSystemConfig } from '../types';
+import { tokens } from '../styles/tokens';
+import presets from '../styles/presets';
 
 interface RunningCalculatorProps {
   unitSystem: UnitSystem;
@@ -165,16 +167,13 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({
 
   return (
     <Card elevation={3}>
-      <CardContent sx={{ p: 3, position: 'relative' }}>
+      <CardContent sx={presets.cardContent}>
         <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 4 }}>
           <Box sx={{ flex: 1 }}>
             <Typography
               variant="h5"
               component="h2"
-              sx={{
-                color: '#1b2a41',
-                mb: 1.5,
-              }}
+              sx={{ ...presets.title, mb: 1.5 }}
             >
               {t('calculator.title')}
             </Typography>
@@ -195,7 +194,7 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({
           />
         </Box>
 
-        <Divider sx={{ mb: 3, borderColor: 'rgba(0, 0, 0, 0.08)' }} />
+        <Divider sx={{ mb: 3, borderColor: tokens.dividerColor }} />
 
         {error && (
           <Alert severity="error" sx={{ mb: 3 }} onClose={() => dispatch({ type: 'CLEAR_ERROR' })}>

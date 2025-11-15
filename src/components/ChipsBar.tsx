@@ -1,5 +1,6 @@
 import React from 'react';
 import { Stack, Chip } from '@mui/material';
+import { tokens } from '../styles/tokens';
 
 export interface ChipOption {
   label: string;
@@ -39,7 +40,7 @@ export const ChipsBar: React.FC<ChipsBarProps> = ({
 
         return (
           <Chip
-            key={chip.label}
+            key={`${chip.label}-${chip.value}`}
             label={chip.label}
             onClick={() => handleChipClick(chip.value)}
             disabled={disabled}
@@ -51,7 +52,7 @@ export const ChipsBar: React.FC<ChipsBarProps> = ({
               fontWeight: 500,
               cursor: disabled ? 'not-allowed' : 'pointer',
               ...(isSelected && {
-                background: 'linear-gradient(90deg, #1b2a41 0%, #324a5f 100%)',
+                background: tokens.chipSelectedGradient,
               }),
             }}
           />

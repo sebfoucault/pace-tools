@@ -18,6 +18,8 @@ import PerformanceGauge from './PerformanceGauge';
 import { predictTimeFromPI } from '../utils/performanceIndex';
 import { formatTimeFromMinutes, formatPaceFromMinutes } from '../utils/formatters';
 import type { UnitSystem, RaceDistance } from '../types';
+import { tokens } from '../styles/tokens';
+import presets from '../styles/presets';
 
 interface RacePredictorProps {
   unitSystem: UnitSystem;
@@ -47,14 +49,12 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
 
   return (
     <Card elevation={3}>
-      <CardContent sx={{ p: 3 }}>
+      <CardContent sx={presets.cardContent}>
         <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3 }}>
           <Typography
             variant="h5"
             component="h2"
-            sx={{
-              color: '#1b2a41',
-            }}
+            sx={presets.title}
           >
             {t('racePredictor.title') || 'Race Predictor'}
           </Typography>
@@ -77,14 +77,14 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
             <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 1 }}>
               <Table size="small">
                 <TableHead>
-                  <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                    <TableCell sx={{ fontWeight: 600, color: '#1b2a41' }}>
+                  <TableRow sx={presets.tableHeaderRow}>
+                    <TableCell sx={{ fontWeight: 600, color: tokens.headerColor }}>
                       {t('racePredictor.distance') || 'Distance'}
                     </TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 600, color: '#1b2a41' }}>
+                    <TableCell align="right" sx={{ fontWeight: 600, color: tokens.headerColor }}>
                       {t('racePredictor.predictedTime') || 'Predicted Time'}
                     </TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 600, color: '#1b2a41' }}>
+                    <TableCell align="right" sx={{ fontWeight: 600, color: tokens.headerColor }}>
                       {t('racePredictor.pace') || 'Pace'}
                     </TableCell>
                   </TableRow>
@@ -117,11 +117,7 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
                       <TableRow
                         key={race.name}
                         hover
-                        sx={{
-                          '&:hover': {
-                            backgroundColor: '#f8f9fa',
-                          },
-                        }}
+                        sx={presets.hoverRow}
                       >
                         <TableCell>
                           <Box>

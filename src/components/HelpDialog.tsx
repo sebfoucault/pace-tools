@@ -27,6 +27,8 @@ import {
   Speed,
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import presets from '../styles/presets';
+import { tokens } from '../styles/tokens';
 
 interface HelpDialogProps {
   open: boolean;
@@ -39,7 +41,7 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ m: 0, p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Typography variant="h6" component="div">
+        <Typography variant="h6" component="div" sx={presets.title}>
           {t('help.title') || 'How to Use Running Calculator'}
         </Typography>
         <IconButton
@@ -60,7 +62,7 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
 
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h6" sx={{ ...presets.title, display: 'flex', alignItems: 'center' }}>
               <Calculate sx={{ mr: 1 }} />
               {t('help.manualCalculation') || 'Manual Calculation'}
             </Typography>
@@ -71,21 +73,21 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
             </Typography>
             <List dense>
               <ListItem>
-                <ListItemIcon><Calculate sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Calculate sx={{ color: 'action.active' }} /></ListItemIcon>
                 <ListItemText
                   primary={t('help.distanceCalc') || 'Distance Calculation'}
                   secondary={t('help.distanceCalcDesc') || 'Enter time and pace, then click the distance calculate button'}
                 />
               </ListItem>
               <ListItem>
-                <ListItemIcon><Calculate sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Calculate sx={{ color: 'action.active' }} /></ListItemIcon>
                 <ListItemText
                   primary={t('help.timeCalc') || 'Time Calculation'}
                   secondary={t('help.timeCalcDesc') || 'Enter distance and pace, then click the time calculate button'}
                 />
               </ListItem>
               <ListItem>
-                <ListItemIcon><Calculate sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Calculate sx={{ color: 'action.active' }} /></ListItemIcon>
                 <ListItemText
                   primary={t('help.paceCalc') || 'Pace Calculation'}
                   secondary={t('help.paceCalcDesc') || 'Enter distance and time, then click the pace calculate button'}
@@ -97,7 +99,7 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
 
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h6" sx={{ ...presets.title, display: 'flex', alignItems: 'center' }}>
               <Lock sx={{ mr: 1 }} />
               {t('help.autoCalculation') || 'Auto-Calculation Mode'}
             </Typography>
@@ -122,11 +124,11 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
                   <ListItemText primary={t('help.step2') || 'The locked field becomes constant (shown with a filled lock icon)'} />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon><Calculate fontSize="small" sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                  <ListItemIcon><Calculate fontSize="small" sx={{ color: 'action.active' }} /></ListItemIcon>
                   <ListItemText primary={t('help.step3') || 'Type values in the other fields - calculations happen instantly!'} />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon><Info fontSize="small" sx={{ color: '#666' }} /></ListItemIcon>
+                  <ListItemIcon><Info fontSize="small" sx={{ color: 'text.secondary' }} /></ListItemIcon>
                   <ListItemText
                     primary={t('help.lockProtection') || 'Locked fields are protected in auto mode'}
                     secondary={t('help.lockProtectionDesc') || 'You can only lock fields with values. In auto mode, locked fields appear grayed out and cannot be edited. Switch to manual mode to edit any field. The lock is automatically released if the field becomes empty.'}
@@ -143,21 +145,21 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
               </Typography>
               <List dense>
                 <ListItem>
-                  <ListItemIcon><Lock sx={{ color: '#324a5f' }} /></ListItemIcon>
+                  <ListItemIcon><Lock sx={{ color: 'primary.main' }} /></ListItemIcon>
                   <ListItemText
                     primary={t('help.lockDistanceTitle') || 'Lock Distance'}
                     secondary={t('help.lockDistanceDesc') || 'Distance stays constant. Change time or pace to calculate the other.'}
                   />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon><Lock sx={{ color: '#324a5f' }} /></ListItemIcon>
+                  <ListItemIcon><Lock sx={{ color: 'primary.main' }} /></ListItemIcon>
                   <ListItemText
                     primary={t('help.lockTimeTitle') || 'Lock Time'}
                     secondary={t('help.lockTimeDesc') || 'Time stays constant. Change distance or pace to calculate the other.'}
                   />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon><Lock sx={{ color: '#324a5f' }} /></ListItemIcon>
+                  <ListItemIcon><Lock sx={{ color: 'primary.main' }} /></ListItemIcon>
                   <ListItemText
                     primary={t('help.lockPaceTitle') || 'Lock Pace'}
                     secondary={t('help.lockPaceDesc') || 'Pace stays constant. Change distance or time to calculate the other.'}
@@ -170,7 +172,7 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
 
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography variant="h6">
+            <Typography variant="h6" sx={presets.title}>
               {t('help.timeFormats') || 'Time Formats'}
             </Typography>
           </AccordionSummary>
@@ -212,7 +214,7 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
 
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h6" sx={{ ...presets.title, display: 'flex', alignItems: 'center' }}>
               <Speed sx={{ mr: 1 }} />
               {t('help.racePredictor') || 'Race Predictor'}
             </Typography>
@@ -232,10 +234,11 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
             </Box>
 
             <Box sx={{
-              backgroundColor: '#f5f5f5',
+              backgroundColor: tokens.tableHeaderBg,
               p: 2,
               borderRadius: 1,
-              border: '1px solid #e0e0e0',
+              border: '1px solid',
+              borderColor: 'divider',
               mb: 2
             }}>
               <Typography variant="subtitle2" gutterBottom>
@@ -271,30 +274,30 @@ const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose }) => {
 
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography variant="h6">
+            <Typography variant="h6" sx={presets.title}>
               {t('help.tips') || 'Tips & Tricks'}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <List dense>
+              <List dense>
               <ListItem>
-                <ListItemIcon><Info sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Info sx={{ color: 'action.active' }} /></ListItemIcon>
                 <ListItemText primary={t('help.tip1') || 'Use auto mode with locked fields for quick "what-if" scenarios - lock your target pace and see how distance affects time.'} />
               </ListItem>
               <ListItem>
-                <ListItemIcon><Info sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Info sx={{ color: 'action.active' }} /></ListItemIcon>
                 <ListItemText primary={t('help.tip2') || 'Only one field can be locked at a time. Locking a new field automatically unlocks the previous one.'} />
               </ListItem>
               <ListItem>
-                <ListItemIcon><Info sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Info sx={{ color: 'action.active' }} /></ListItemIcon>
                 <ListItemText primary={t('help.tip3') || 'Switch to manual mode if you need to edit a locked field, then switch back to auto mode to continue auto-calculation.'} />
               </ListItem>
               <ListItem>
-                <ListItemIcon><Info sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Info sx={{ color: 'action.active' }} /></ListItemIcon>
                 <ListItemText primary={t('help.tip4') || 'The Speed ↔ Pace Converter helps convert between pace (min/km or min/mi) and speed (km/h or mph).'} />
               </ListItem>
               <ListItem>
-                <ListItemIcon><Info sx={{ color: '#1b2a41' }} /></ListItemIcon>
+                <ListItemIcon><Info sx={{ color: 'action.active' }} /></ListItemIcon>
                 <ListItemText primary={t('help.tip5') || 'Switch between metric and imperial units in the settings to match your preference.'} />
               </ListItem>
             </List>
