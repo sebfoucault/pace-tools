@@ -64,6 +64,24 @@ Run tests in interactive watch mode:
 npm test -- --watch
 ```
 
+### Testing Conventions
+
+- Structure: Keep tests inside `__tests__` folders next to their domain:
+   - `src/components/__tests__`, `src/hooks/__tests__`, `src/utils/__tests__`.
+- Component parity: Ensure each component under `src/components` has at least one corresponding test file.
+- Naming: Use `ComponentName.test.tsx` for broad coverage and `ComponentName.Feature.test.tsx` for focused scenarios (e.g., `RunningCalculator.Recalculation.test.tsx`).
+- No smoke tests: Avoid generic render-only tests (e.g., `App.test.tsx`). Prefer meaningful behavioral tests within component-scoped suites.
+- i18n in tests: Component tests mock `react-i18next` to keep labels deterministic:
+   ```ts
+   jest.mock('react-i18next', () => ({
+      useTranslation: () => ({ t: (key: string) => key }),
+   }));
+   ```
+- Coverage run (CI-friendly):
+   ```bash
+   CI=true npm test -- --coverage --watchAll=false
+   ```
+
 ## Usage
 
 Refer to the in-app help dialog for detailed instructions on using the calculator and converter features.

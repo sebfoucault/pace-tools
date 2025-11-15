@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import RacePredictor from '../components/RacePredictor';
+import RacePredictor from '../RacePredictor';
 
 describe('RacePredictor Component', () => {
   describe('Smoke Test', () => {
@@ -74,8 +74,6 @@ describe('RacePredictor Component', () => {
   describe('Race Table Display', () => {
     it('should display race table when PI is valid', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={45} />);
-
-      // Check for table headers
       expect(screen.getByText(/racePredictor.distance/i)).toBeInTheDocument();
       expect(screen.getByText(/racePredictor.predictedTime/i)).toBeInTheDocument();
       expect(screen.getByText(/racePredictor.pace/i)).toBeInTheDocument();
@@ -83,8 +81,6 @@ describe('RacePredictor Component', () => {
 
     it('should display all race distances', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={45} />);
-
-      // Check for specific race distances
       expect(screen.getByText('1000m')).toBeInTheDocument();
       expect(screen.getByText('1500m')).toBeInTheDocument();
       expect(screen.getByText('5K')).toBeInTheDocument();
@@ -100,14 +96,10 @@ describe('RacePredictor Component', () => {
 
     it('should display race times in correct format', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={45} />);
-
-      // Times should be in MM:SS or H:MM:SS format
-      // Get all table cells and check for time format pattern
       const tableCells = screen.getAllByRole('cell');
       const timeCells = tableCells.filter(cell =>
         /\d{1,2}:\d{2}(:\d{2})?/.test(cell.textContent || '')
       );
-
       expect(timeCells.length).toBeGreaterThan(0);
     });
   });
@@ -115,12 +107,8 @@ describe('RacePredictor Component', () => {
   describe('Unit System - Metric', () => {
     it('should display distances in kilometers', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={45} />);
-
-      // Check for km unit (will find multiple)
       const kmElements = screen.getAllByText(/km/);
       expect(kmElements.length).toBeGreaterThan(0);
-
-      // Check specific distances
       expect(screen.getByText('1000m')).toBeInTheDocument();
       expect(screen.getByText('5K')).toBeInTheDocument();
       expect(screen.getByText('10K')).toBeInTheDocument();
@@ -128,8 +116,6 @@ describe('RacePredictor Component', () => {
 
     it('should display pace in min/km', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={45} />);
-
-      // Should find multiple instances of min/km
       const minKmElements = screen.getAllByText(/min\/km/);
       expect(minKmElements.length).toBeGreaterThan(0);
     });
@@ -138,12 +124,8 @@ describe('RacePredictor Component', () => {
   describe('Unit System - Imperial', () => {
     it('should display distances in miles', () => {
       render(<RacePredictor unitSystem="imperial" performanceIndex={45} />);
-
-      // Check for mi unit (will find multiple)
       const miElements = screen.getAllByText(/mi/);
       expect(miElements.length).toBeGreaterThan(0);
-
-      // Check specific race names appear
       expect(screen.getByText('1000m')).toBeInTheDocument();
       expect(screen.getByText('5K')).toBeInTheDocument();
       expect(screen.getByText('10K')).toBeInTheDocument();
@@ -151,17 +133,12 @@ describe('RacePredictor Component', () => {
 
     it('should display pace in min/mi', () => {
       render(<RacePredictor unitSystem="imperial" performanceIndex={45} />);
-
-      // Should find multiple instances of min/mi
       const minMiElements = screen.getAllByText(/min\/mi/);
       expect(minMiElements.length).toBeGreaterThan(0);
     });
   });
 
   describe('Performance Index Ranges and Colors', () => {
-    // Note: Color testing would require more complex DOM inspection
-    // Here we just verify the component renders with different PI values
-
     it('should render with low PI (< 40)', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={35} />);
       expect(screen.getByText('35.0')).toBeInTheDocument();
@@ -186,15 +163,11 @@ describe('RacePredictor Component', () => {
   describe('Race Predictions Accuracy', () => {
     it('should predict reasonable 5K time for moderate PI', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={40} />);
-
-      // For PI of 40, 5K time should be reasonable (15-35 minutes)
-      // Just verify that the 5K race appears in the table
       expect(screen.getByText('5K')).toBeInTheDocument();
     });
 
     it('should show note about prediction model', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={45} />);
-
       expect(screen.getByText(/racePredictor.note/i)).toBeInTheDocument();
     });
   });
@@ -202,13 +175,11 @@ describe('RacePredictor Component', () => {
   describe('Edge Cases', () => {
     it('should handle very low PI', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={0.1} />);
-      // 0.1 is still > 0, so it will show the PI and table
       expect(screen.getByText('0.1')).toBeInTheDocument();
     });
 
     it('should handle very high PI', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={200} />);
-      // Should cap at 100
       expect(screen.getByText('100.0')).toBeInTheDocument();
     });
 

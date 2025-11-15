@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import PerformanceGauge from '../components/PerformanceGauge';
+import PerformanceGauge from '../PerformanceGauge';
 
 describe('PerformanceGauge Component', () => {
   describe('Display Tests', () => {
@@ -78,7 +78,6 @@ describe('PerformanceGauge Component', () => {
     it('should render filled arc for non-zero performance', () => {
       const { container } = render(<PerformanceGauge performanceIndex={50} />);
       const paths = container.querySelectorAll('path');
-      // Should have at least 2 paths: background arc and filled arc
       expect(paths.length).toBeGreaterThanOrEqual(2);
     });
 
@@ -92,13 +91,13 @@ describe('PerformanceGauge Component', () => {
   describe('Accessibility', () => {
     it('should have default aria-label for N/A state', () => {
       const { container } = render(<PerformanceGauge performanceIndex={null} />);
-      const gauge = container.firstChild;
+      const gauge = container.firstChild as HTMLElement;
       expect(gauge).toHaveAttribute('aria-label', 'Performance Index not available');
     });
 
     it('should have default aria-label with PI value', () => {
       const { container } = render(<PerformanceGauge performanceIndex={45.7} />);
-      const gauge = container.firstChild;
+      const gauge = container.firstChild as HTMLElement;
       expect(gauge).toHaveAttribute('aria-label', 'Performance Index: 45.7');
     });
 
@@ -106,7 +105,7 @@ describe('PerformanceGauge Component', () => {
       const { container } = render(
         <PerformanceGauge performanceIndex={50} ariaLabel="Custom label" />
       );
-      const gauge = container.firstChild;
+      const gauge = container.firstChild as HTMLElement;
       expect(gauge).toHaveAttribute('aria-label', 'Custom label');
     });
 
@@ -114,7 +113,7 @@ describe('PerformanceGauge Component', () => {
       const { container } = render(
         <PerformanceGauge performanceIndex={50} tooltip="Test tooltip" />
       );
-      const gauge = container.firstChild;
+      const gauge = container.firstChild as HTMLElement;
       expect(gauge).toHaveAttribute('title', 'Test tooltip');
     });
   });
@@ -122,21 +121,21 @@ describe('PerformanceGauge Component', () => {
   describe('Size Prop', () => {
     it('should use default size of 80 when not specified', () => {
       const { container } = render(<PerformanceGauge performanceIndex={50} />);
-      const svg = container.querySelector('svg');
+      const svg = container.querySelector('svg')!;
       expect(svg).toHaveAttribute('width', '80');
       expect(svg).toHaveAttribute('height', '80');
     });
 
     it('should accept custom size', () => {
       const { container } = render(<PerformanceGauge performanceIndex={50} size={100} />);
-      const svg = container.querySelector('svg');
+      const svg = container.querySelector('svg')!;
       expect(svg).toHaveAttribute('width', '100');
       expect(svg).toHaveAttribute('height', '100');
     });
 
     it('should scale properly with custom size', () => {
       const { container } = render(<PerformanceGauge performanceIndex={50} size={120} />);
-      const box = container.querySelector('[aria-label*="Performance Index"]');
+      const box = container.querySelector('[aria-label*="Performance Index"]') as HTMLElement;
       expect(box).toHaveStyle({ width: '120px', height: '120px' });
     });
   });
