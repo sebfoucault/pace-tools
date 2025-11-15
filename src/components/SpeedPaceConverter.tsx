@@ -9,7 +9,6 @@ import {
 import { SwapVert } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import TimeInput from './TimeInput';
-import { tokens } from '../styles/tokens';
 import presets from '../styles/presets';
 
 interface ConversionState {

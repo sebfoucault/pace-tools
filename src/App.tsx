@@ -10,7 +10,6 @@ import HelpDialog from './components/HelpDialog';
 import type { UnitSystem } from './types';
 import './i18n/config';
 import theme from './theme';
-import presets from './styles/presets';
 
 function App() {
   const { t } = useTranslation();
