@@ -16,19 +16,19 @@ describe('RacePredictor Component', () => {
   });
 
   describe('Performance Index Gauge Display', () => {
-    it('should display N/A when PI is null', () => {
+    it('should display em dash when PI is null', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={null} />);
-      expect(screen.getByText('N/A')).toBeInTheDocument();
+      expect(screen.getByText('—')).toBeInTheDocument();
     });
 
-    it('should display N/A when PI is zero', () => {
+    it('should display em dash when PI is zero', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={0} />);
-      expect(screen.getByText('N/A')).toBeInTheDocument();
+      expect(screen.getByText('—')).toBeInTheDocument();
     });
 
-    it('should display N/A when PI is negative', () => {
+    it('should display em dash when PI is negative', () => {
       render(<RacePredictor unitSystem="metric" performanceIndex={-5} />);
-      expect(screen.getByText('N/A')).toBeInTheDocument();
+      expect(screen.getByText('—')).toBeInTheDocument();
     });
 
     it('should display PI value when valid', () => {
@@ -209,11 +209,11 @@ describe('RacePredictor Component', () => {
 
     it('should handle PI changing from null to valid', () => {
       const { rerender } = render(<RacePredictor unitSystem="metric" performanceIndex={null} />);
-      expect(screen.getByText('N/A')).toBeInTheDocument();
+      expect(screen.getByText('—')).toBeInTheDocument();
 
       rerender(<RacePredictor unitSystem="metric" performanceIndex={45} />);
       expect(screen.getByText('45.0')).toBeInTheDocument();
-      expect(screen.queryByText('N/A')).not.toBeInTheDocument();
+      expect(screen.queryByText('—')).not.toBeInTheDocument();
     });
 
     it('should handle PI changing from valid to null', () => {
@@ -221,7 +221,7 @@ describe('RacePredictor Component', () => {
       expect(screen.getByText('45.0')).toBeInTheDocument();
 
       rerender(<RacePredictor unitSystem="metric" performanceIndex={null} />);
-      expect(screen.getByText('N/A')).toBeInTheDocument();
+      expect(screen.getByText('—')).toBeInTheDocument();
     });
   });
 });
