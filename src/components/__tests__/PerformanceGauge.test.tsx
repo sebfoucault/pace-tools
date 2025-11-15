@@ -140,68 +140,30 @@ describe('PerformanceGauge Component', () => {
     });
   });
 
-  describe('Color Coding', () => {
-    it('should use red color for low performance (< 40)', () => {
-      const { container } = render(<PerformanceGauge performanceIndex={35} />);
-      const paths = container.querySelectorAll('path');
-      const filledPath = Array.from(paths).find(path =>
-        path.getAttribute('stroke') === '#f44336'
-      );
-      expect(filledPath).toBeInTheDocument();
-    });
-
-    it('should use orange color for moderate performance (40-54)', () => {
-      const { container } = render(<PerformanceGauge performanceIndex={45} />);
-      const paths = container.querySelectorAll('path');
-      const filledPath = Array.from(paths).find(path =>
-        path.getAttribute('stroke') === '#ff9800'
-      );
-      expect(filledPath).toBeInTheDocument();
-    });
-
-    it('should use blue color for good performance (55-69)', () => {
+  describe('Color Style', () => {
+    it('should use black color for filled arc', () => {
       const { container } = render(<PerformanceGauge performanceIndex={60} />);
       const paths = container.querySelectorAll('path');
       const filledPath = Array.from(paths).find(path =>
-        path.getAttribute('stroke') === '#42a5f5'
+        path.getAttribute('stroke') === 'black'
       );
       expect(filledPath).toBeInTheDocument();
     });
 
-    it('should use green color for excellent performance (>= 70)', () => {
-      const { container } = render(<PerformanceGauge performanceIndex={75} />);
+    it('should use grey color for background arc', () => {
+      const { container } = render(<PerformanceGauge performanceIndex={60} />);
       const paths = container.querySelectorAll('path');
-      const filledPath = Array.from(paths).find(path =>
-        path.getAttribute('stroke') === '#4caf50'
+      const greyPath = Array.from(paths).find(path =>
+        path.getAttribute('stroke') === 'rgba(0, 0, 0, 0.1)'
       );
-      expect(filledPath).toBeInTheDocument();
+      expect(greyPath).toBeInTheDocument();
     });
 
-    it('should use green for boundary value 70', () => {
-      const { container } = render(<PerformanceGauge performanceIndex={70} />);
+    it('should use round stroke caps for arcs', () => {
+      const { container } = render(<PerformanceGauge performanceIndex={60} />);
       const paths = container.querySelectorAll('path');
-      const filledPath = Array.from(paths).find(path =>
-        path.getAttribute('stroke') === '#4caf50'
-      );
-      expect(filledPath).toBeInTheDocument();
-    });
-
-    it('should use blue for boundary value 55', () => {
-      const { container } = render(<PerformanceGauge performanceIndex={55} />);
-      const paths = container.querySelectorAll('path');
-      const filledPath = Array.from(paths).find(path =>
-        path.getAttribute('stroke') === '#42a5f5'
-      );
-      expect(filledPath).toBeInTheDocument();
-    });
-
-    it('should use orange for boundary value 40', () => {
-      const { container } = render(<PerformanceGauge performanceIndex={40} />);
-      const paths = container.querySelectorAll('path');
-      const filledPath = Array.from(paths).find(path =>
-        path.getAttribute('stroke') === '#ff9800'
-      );
-      expect(filledPath).toBeInTheDocument();
+      const roundCapped = Array.from(paths).every(path => path.getAttribute('stroke-linecap') === 'round');
+      expect(roundCapped).toBe(true);
     });
   });
 

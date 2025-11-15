@@ -34,6 +34,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
   tooltip,
   ariaLabel,
 }) => {
+  const maskId = React.useId();
   // Display N/A when PI is not available
   if (performanceIndex === null || performanceIndex <= 0) {
     return (
@@ -87,6 +88,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
   const centerY = size / 2;
   const startAngleDeg = 210;
   const totalArcDegrees = 300;
+  const strokeW = 6;
 
   // Helper: convert angle to cartesian coordinates
   const polarToCartesian = (angleInDegrees: number) => {
@@ -97,24 +99,21 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
     };
   };
 
-  // Create arc path from start angle spanning given degrees clockwise
-  const createArcPath = (arcDegrees: number) => {
-    const start = polarToCartesian(startAngleDeg);
-    const end = polarToCartesian(startAngleDeg + arcDegrees);
+  // Create arc path from a given start angle spanning given degrees clockwise
+  const createArcPathFrom = (startDeg: number, arcDegrees: number) => {
+    const start = polarToCartesian(startDeg);
+    const end = polarToCartesian(startDeg + arcDegrees);
     const largeArcFlag = arcDegrees > 180 ? '1' : '0';
     return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
   };
 
+  // Convenience wrapper for full-arc from the component's start angle
+  const createArcPath = (arcDegrees: number) => createArcPathFrom(startAngleDeg, arcDegrees);
+
   const filledArcDegrees = (totalArcDegrees * gaugePercentage) / 100;
 
-  // Color based on performance level
-  const gaugeColor = displayPI >= 70
-    ? tokens.gaugeExcellent  // Green for excellent
-    : displayPI >= 55
-    ? tokens.gaugeGood  // Blue for good
-    : displayPI >= 40
-    ? tokens.gaugeModerate  // Orange for moderate
-    : tokens.gaugeLow; // Red for low
+  // Mono color scheme: black foreground over grey background
+  const gaugeColor = 'black';
 
   return (
     <Box
@@ -144,24 +143,106 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({
           strokeWidth="1"
         />
 
-        {/* Gray background arc - full 300° */}
-        <path
-          d={createArcPath(totalArcDegrees)}
-          fill="none"
-          stroke={tokens.gaugeBackgroundArcStroke}
-          strokeWidth="6"
-          strokeLinecap="round"
-        />
-
-        {/* Colored arc - filled portion */}
-        {gaugePercentage > 0 && (
+        {/*
+          Draw with a small gap between the black (filled) arc and the grey arc.
+          - When percentage == 0: draw a single full grey arc.
+          - Otherwise:
+            * Draw black arc shortened by half the gap.
+            * Draw grey arc starting after the gap so a thin space remains visible.
+        */}
+        {gaugePercentage <= 0 ? (
           <path
-            d={createArcPath(filledArcDegrees)}
+            d={createArcPath(totalArcDegrees)}
             fill="none"
-            stroke={gaugeColor}
-            strokeWidth="6"
+            stroke={tokens.gaugeBackgroundArcStroke}
+            strokeWidth={strokeW}
             strokeLinecap="round"
           />
+        ) : (
+          <>
+            {(() => {
+              // Dynamic gap: ensure visible separation accounting for round caps
+              const arcLenPerDeg = (Math.PI * 2 * radius) / 360; // px per degree
+              const desiredGapPx = Math.max(1.5, strokeW * 0.25); // subtle gap that scales mildly
+              const minGapDeg = 1.5;
+              const maxGapDeg = 3.0;
+              const computedDeg = desiredGapPx / arcLenPerDeg;
+              const gapDeg = Math.min(totalArcDegrees, Math.max(minGapDeg, Math.min(maxGapDeg, computedDeg)));
+
+              // For very small fills, show the black arc without forcing a gap
+              if (filledArcDegrees <= gapDeg) {
+                const greyArcDegSmall = Math.max(0, totalArcDegrees - filledArcDegrees);
+                return (
+                  <>
+                    <path
+                      d={createArcPath(filledArcDegrees)}
+                      fill="none"
+                      stroke={gaugeColor}
+                      strokeWidth={strokeW}
+                      strokeLinecap="round"
+                    />
+                    {greyArcDegSmall > 0 && (
+                      <path
+                        d={createArcPathFrom(startAngleDeg + filledArcDegrees, greyArcDegSmall)}
+                        fill="none"
+                        stroke={tokens.gaugeBackgroundArcStroke}
+                        strokeWidth={strokeW}
+                        strokeLinecap="round"
+                      />
+                    )}
+                  </>
+                );
+              }
+
+              // Normal case: shorten black and start grey after the gap
+              const blackArcDeg = Math.max(0, Math.min(totalArcDegrees, filledArcDegrees - gapDeg / 2));
+              const greyStartDeg = startAngleDeg + Math.min(totalArcDegrees, filledArcDegrees + gapDeg / 2);
+              const greyArcDeg = Math.max(0, totalArcDegrees - (filledArcDegrees + gapDeg / 2));
+
+              return (
+                <>
+                  {/* Mask to notch the grey arc start to create a concave (female) edge */}
+                  {greyArcDeg > 0 && (
+                    <mask id={maskId}>
+                      <rect x="0" y="0" width={size} height={size} fill="white" />
+                      {(() => {
+                        const notchCenter = polarToCartesian(greyStartDeg);
+                        const notchRadius = strokeW / 2 + 0.5;
+                        return (
+                          <circle
+                            cx={notchCenter.x}
+                            cy={notchCenter.y}
+                            r={notchRadius}
+                            fill="black"
+                          />
+                        );
+                      })()}
+                    </mask>
+                  )}
+
+                  {blackArcDeg > 0 && (
+                    <path
+                      d={createArcPath(blackArcDeg)}
+                      fill="none"
+                      stroke={gaugeColor}
+                      strokeWidth={strokeW}
+                      strokeLinecap="round"
+                    />
+                  )}
+                  {greyArcDeg > 0 && (
+                    <path
+                      d={createArcPathFrom(greyStartDeg, greyArcDeg)}
+                      fill="none"
+                      stroke={tokens.gaugeBackgroundArcStroke}
+                      strokeWidth={strokeW}
+                      strokeLinecap="round"
+                      mask={`url(#${maskId})`}
+                    />
+                  )}
+                </>
+              );
+            })()}
+          </>
         )}
       </svg>
 
