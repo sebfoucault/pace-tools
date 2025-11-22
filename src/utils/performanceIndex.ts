@@ -40,6 +40,15 @@ export const PI_CONSTANTS = {
   // Unit conversions
   METERS_PER_KM: 1000,
   METERS_PER_MILE: 1609.34,
+
+  // Training pace percentages (from performance-index.md)
+  TRAINING_PACES: {
+    easy: { min: 0.59, max: 0.74 },
+    marathon: { min: 0.75, max: 0.84 },
+    threshold: { min: 0.83, max: 0.88 },
+    interval: { min: 0.95, max: 1.00 },
+    repetition: { min: 1.00, max: 1.20 },
+  },
 } as const;
 
 /**
@@ -202,4 +211,99 @@ export function predictTimeFromPI(
     }
     return null;
   }
+}
+
+/**
+ * Training pace types based on Jack Daniels' training zones
+ */
+export type TrainingPaceType = 'easy' | 'marathon' | 'threshold' | 'interval' | 'repetition';
+
+/**
+ * Training pace range result
+ */
+export interface TrainingPaceRange {
+  minVelocity: number; // meters per minute
+  maxVelocity: number; // meters per minute
+  type: TrainingPaceType;
+}
+
+/**
+ * Calculate velocity from performance index and percentage
+ * Formula from performance-index.md:
+ * v = (-0.182258 + sqrt(0.182258^2 - (4 * 0.000104) * (-4.60 - (pi*pct)))) / (2*0.000104)
+ *
+ * @param pi - Performance index
+ * @param pct - Percentage of PI (e.g., 0.75 for marathon pace)
+ * @returns Velocity in meters per minute, or null if calculation fails
+ */
+export function calculateVelocityFromPIPct(pi: number, pct: number): number | null {
+  if (!pi || pi <= 0 || !pct || pct <= 0) {
+    return null;
+  }
+
+  try {
+    const { I_LINEAR, I_QUADRATIC, I_OFFSET } = PI_CONSTANTS;
+    const a = I_QUADRATIC;
+    const b = I_LINEAR;
+    const c = I_OFFSET - (pi * pct);
+
+    const discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0) {
+      return null;
+    }
+
+    // Use positive root (negative would give negative velocity)
+    const velocity = (-b + Math.sqrt(discriminant)) / (2 * a);
+
+    return velocity > 0 ? velocity : null;
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Error calculating velocity from PI and percentage:', error);
+    }
+    return null;
+  }
+}
+
+/**
+ * Calculate training pace range for a given type
+ * @param pi - Performance index
+ * @param type - Training pace type
+ * @returns Training pace range or null if calculation fails
+ */
+export function calculateTrainingPaceRange(
+  pi: number,
+  type: TrainingPaceType
+): TrainingPaceRange | null {
+  if (!pi || pi <= 0) {
+    return null;
+  }
+
+  const paceRange = PI_CONSTANTS.TRAINING_PACES[type];
+  if (!paceRange) {
+    return null;
+  }
+
+  const minVelocity = calculateVelocityFromPIPct(pi, paceRange.max); // Higher pct = slower pace (lower velocity)
+  const maxVelocity = calculateVelocityFromPIPct(pi, paceRange.min); // Lower pct = faster pace (higher velocity)
+
+  if (!minVelocity || !maxVelocity) {
+    return null;
+  }
+
+  return {
+    minVelocity,
+    maxVelocity,
+    type,
+  };
+}
+
+/**
+ * Calculate time for a given distance at a specific velocity
+ * @param distanceMeters - Distance in meters
+ * @param velocityMPerMin - Velocity in meters per minute
+ * @returns Time in minutes
+ */
+export function calculateTimeForDistance(distanceMeters: number, velocityMPerMin: number): number {
+  return distanceMeters / velocityMPerMin;
 }

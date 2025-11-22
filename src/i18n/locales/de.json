@@ -3,8 +3,9 @@
     "title": "Lauf-Rechner",
     "changeLanguage": "Sprache Ändern",
     "calculatorTab": "Rechner",
-    "converterTab": "Umrechner",
-    "racePredictorTab": "Wettkampf-Vorhersage"
+    "trainingTab": "Trainingstempo",
+    "racePredictorTab": "Wettkampf-Vorhersage",
+    "converterTab": "Umrechner"
   },
   "calculator": {
     "title": "Laufrechner",
@@ -120,6 +121,22 @@
     "predictedTime": "Vorhergesagte Zeit",
     "pace": "Tempo",
     "note": "Hinweis: Vorhersagen basieren auf Jack Daniels' Laufformel unter Verwendung des Riegel/Cameron Leistungsmodells. Tatsächliche Wettkampfzeiten können aufgrund von Training, Bedingungen und Streckenschwierigkeit variieren."
+  },
+  "trainingPaces": {
+    "title": "Trainingstempo",
+    "enterData": "Geben Sie Distanz und Zeit im Rechner-Tab ein, um Trainingstempo-Empfehlungen zu erhalten.",
+    "description": "Basierend auf Ihrem Leistungsindex sind hier empfohlene Trainingstempi für verschiedene Trainingsarten:",
+    "note": "Hinweis: Trainingstempi basieren auf Jack Daniels' Laufformel. Passen Sie sie an Ihre aktuelle Fitness, Trainingsziele und Umgebungsbedingungen an.",
+    "easy": "Dauerlauf",
+    "marathon": "Marathontempo",
+    "threshold": "Schwellentempo",
+    "interval": "Intervall-Tempo",
+    "repetition": "Wiederholungs-Tempo",
+    "pace": "Tempo",
+    "distance": "Distanz",
+    "timeRange": "Zeitbereich",
+    "previous": "Zurück",
+    "next": "Weiter"
   },
   "common": {
     "done": "Fertig",

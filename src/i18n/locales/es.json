@@ -3,8 +3,9 @@
     "title": "Calculadora de Running",
     "changeLanguage": "Cambiar Idioma",
     "calculatorTab": "Calculadora",
-    "converterTab": "Convertidor",
-    "racePredictorTab": "Predictor de Carreras"
+    "trainingTab": "Ritmos de Entrenamiento",
+    "racePredictorTab": "Predictor de Carreras",
+    "converterTab": "Convertidor"
   },
   "settings": {
     "title": "Configuración",
@@ -119,6 +120,22 @@
     "predictedTime": "Tiempo Predicho",
     "pace": "Ritmo",
     "note": "Nota: Las predicciones se basan en la Fórmula de Running de Jack Daniels usando el modelo de rendimiento de Riegel/Cameron. Los tiempos reales de carrera pueden variar según el entrenamiento, las condiciones y la dificultad del recorrido."
+  },
+  "trainingPaces": {
+    "title": "Ritmos de Entrenamiento",
+    "enterData": "Ingrese distancia y tiempo en la pestaña Calculadora para obtener recomendaciones de ritmo de entrenamiento.",
+    "description": "Basado en su índice de rendimiento, aquí están los ritmos de entrenamiento recomendados para diferentes tipos de entrenamientos:",
+    "note": "Nota: Los ritmos de entrenamiento se basan en la Fórmula de Running de Jack Daniels. Ajuste según su condición física actual, objetivos de entrenamiento y condiciones ambientales.",
+    "easy": "Carrera Suave",
+    "marathon": "Ritmo Maratón",
+    "threshold": "Umbral",
+    "interval": "Ritmo de Intervalos",
+    "repetition": "Ritmo de Repeticiones",
+    "pace": "Ritmo",
+    "distance": "Distancia",
+    "timeRange": "Rango de Tiempo",
+    "previous": "Anterior",
+    "next": "Siguiente"
   },
   "common": {
     "done": "Hecho",

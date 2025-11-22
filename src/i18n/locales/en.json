@@ -3,8 +3,9 @@
     "title": "Pace Tools",
     "changeLanguage": "Change Language",
     "calculatorTab": "Pace Calculator",
-    "converterTab": "Pace Converter",
-    "racePredictorTab": "Race Predictor"
+    "trainingTab": "Training Paces",
+    "racePredictorTab": "Race Predictor",
+    "converterTab": "Pace Converter"
   },
   "settings": {
     "title": "Settings",
@@ -119,6 +120,22 @@
     "predictedTime": "Predicted Time",
     "pace": "Pace",
     "note": "Note: Predictions are based on Jack Daniels' Running Formula using the Riegel/Cameron performance model. Actual race times may vary based on training, conditions, and course difficulty."
+  },
+  "trainingPaces": {
+    "title": "Training Paces",
+    "enterData": "Enter distance and time in the Calculator tab to get training pace recommendations.",
+    "description": "Based on your performance index, here are recommended training paces for different workout types:",
+    "note": "Note: Training paces are based on Jack Daniels' Running Formula. Adjust based on your current fitness, training goals, and environmental conditions.",
+    "easy": "Easy Run",
+    "marathon": "Marathon Pace",
+    "threshold": "Threshold",
+    "interval": "Interval Pace",
+    "repetition": "Repetition Pace",
+    "pace": "Pace",
+    "distance": "Distance",
+    "timeRange": "Time Range",
+    "previous": "Previous",
+    "next": "Next"
   },
   "common": {
     "done": "Done",

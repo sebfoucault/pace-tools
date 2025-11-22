@@ -3,8 +3,9 @@
     "title": "Calculateur de Course",
     "changeLanguage": "Changer de Langue",
     "calculatorTab": "Calculateur",
-    "converterTab": "Convertisseur",
-    "racePredictorTab": "Prédicteur de Course"
+    "trainingTab": "Allures d'Entraînement",
+    "racePredictorTab": "Prédicteur de Course",
+    "converterTab": "Convertisseur"
   },
   "settings": {
     "title": "Paramètres",
@@ -119,6 +120,22 @@
     "predictedTime": "Temps Prédit",
     "pace": "Allure",
     "note": "Note : Les prédictions sont basées sur la Formule de Course de Jack Daniels utilisant le modèle de performance de Riegel/Cameron. Les temps de course réels peuvent varier en fonction de l'entraînement, des conditions et de la difficulté du parcours."
+  },
+  "trainingPaces": {
+    "title": "Allures d'Entraînement",
+    "enterData": "Entrez la distance et le temps dans l'onglet Calculateur pour obtenir des recommandations d'allure d'entraînement.",
+    "description": "Basé sur votre indice de performance, voici les allures d'entraînement recommandées pour différents types d'entraînement :",
+    "note": "Note : Les allures d'entraînement sont basées sur la Formule de Course de Jack Daniels. Ajustez en fonction de votre condition physique actuelle, de vos objectifs d'entraînement et des conditions environnementales.",
+    "easy": "Course Facile",
+    "marathon": "Allure Marathon",
+    "threshold": "Seuil",
+    "interval": "Allure Intervalles",
+    "repetition": "Allure Répétitions",
+    "pace": "Allure",
+    "distance": "Distance",
+    "timeRange": "Plage de Temps",
+    "previous": "Précédent",
+    "next": "Suivant"
   },
   "common": {
     "done": "Terminé",

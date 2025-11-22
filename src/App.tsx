@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { ThemeProvider, CssBaseline, Container, AppBar, Toolbar, Typography, Box, IconButton, Tabs, Tab } from '@mui/material';
-import { Speed, Settings, Help, Fullscreen, FullscreenExit, Calculate, TrendingUp, SwapHoriz } from '@mui/icons-material';
+import { Speed, Settings, Help, Fullscreen, FullscreenExit, Calculate, TrendingUp, SwapHoriz, FitnessCenter } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import RunningCalculator from './components/RunningCalculator';
 import RacePredictor from './components/RacePredictor';
 import SpeedPaceConverter from './components/SpeedPaceConverter';
+import TrainingPaces from './components/TrainingPaces';
 import SettingsDialog from './components/SettingsDialog';
 import HelpDialog from './components/HelpDialog';
 import type { UnitSystem } from './types';
@@ -158,6 +159,11 @@ function App() {
               iconPosition="start"
             />
             <Tab
+              icon={<FitnessCenter />}
+              label={t('app.trainingTab') || 'Training'}
+              iconPosition="start"
+            />
+            <Tab
               icon={<TrendingUp />}
               label={t('app.racePredictorTab') || 'Race Predictor'}
               iconPosition="start"
@@ -186,7 +192,7 @@ function App() {
               display: currentTab === 1 ? 'block' : 'none',
             }}
           >
-            <RacePredictor
+            <TrainingPaces
               unitSystem={unitSystem}
               performanceIndex={performanceIndex}
             />
@@ -195,6 +201,17 @@ function App() {
           <Box
             sx={{
               display: currentTab === 2 ? 'block' : 'none',
+            }}
+          >
+            <RacePredictor
+              unitSystem={unitSystem}
+              performanceIndex={performanceIndex}
+            />
+          </Box>
+
+          <Box
+            sx={{
+              display: currentTab === 3 ? 'block' : 'none',
             }}
           >
             <SpeedPaceConverter unitSystem={unitSystem} />
