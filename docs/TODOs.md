@@ -3,7 +3,7 @@
 
 ## Functional
 
-- Add support for PWA
+- Add support for PWA                                   - DONE
 - Add Android store deployment
 - Add support for local storage
     - For persisting user preferences
