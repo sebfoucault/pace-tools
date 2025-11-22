@@ -12,8 +12,8 @@
     - Remove color banding                              - DONE
     - Improve drawing                                   - DONE
 - Improve overall layout
-- Chips - Add support for continous incr/dec
-- Add training paces
+- Chips - Add support for continous incr/dec            - DONE
+- Add training paces                                    - DONE
 
 ## Technical
 - Rationalize styling                                   - DONE

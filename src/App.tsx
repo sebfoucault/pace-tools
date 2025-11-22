@@ -141,35 +141,47 @@ function App() {
           <Tabs
             value={currentTab}
             onChange={handleTabChange}
-            variant="fullWidth"
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
             sx={{
               mb: 3,
               borderBottom: 1,
               borderColor: 'divider',
               '& .MuiTab-root': {
                 minHeight: 48,
-                fontSize: '0.875rem',
+                minWidth: { xs: 'auto', sm: 120 },
+                px: { xs: 2, sm: 3 },
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
                 textTransform: 'none',
+                '& .MuiTab-iconWrapper': {
+                  marginRight: { xs: 0.5, sm: 1 },
+                },
+              },
+              '& .MuiTabs-scrollButtons': {
+                '&.Mui-disabled': {
+                  opacity: 0.3,
+                },
               },
             }}
           >
             <Tab
-              icon={<Calculate />}
+              icon={<Calculate fontSize="small" />}
               label={t('app.calculatorTab') || 'Calculator'}
               iconPosition="start"
             />
             <Tab
-              icon={<FitnessCenter />}
+              icon={<FitnessCenter fontSize="small" />}
               label={t('app.trainingTab') || 'Training'}
               iconPosition="start"
             />
             <Tab
-              icon={<TrendingUp />}
+              icon={<TrendingUp fontSize="small" />}
               label={t('app.racePredictorTab') || 'Race Predictor'}
               iconPosition="start"
             />
             <Tab
-              icon={<SwapHoriz />}
+              icon={<SwapHoriz fontSize="small" />}
               label={t('app.converterTab') || 'Converter'}
               iconPosition="start"
             />
