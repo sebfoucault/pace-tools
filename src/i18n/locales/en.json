@@ -2,10 +2,10 @@
   "app": {
     "title": "Pace Tools",
     "changeLanguage": "Change Language",
-    "calculatorTab": "Pace Calculator",
-    "trainingTab": "Training Paces",
-    "racePredictorTab": "Race Predictor",
-    "converterTab": "Pace Converter"
+    "calculatorTab": "Calculator",
+    "trainingTab": "Training",
+    "racePredictorTab": "Race",
+    "converterTab": "Converter"
   },
   "settings": {
     "title": "Settings",

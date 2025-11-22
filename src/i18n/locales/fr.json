@@ -3,8 +3,8 @@
     "title": "Calculateur de Course",
     "changeLanguage": "Changer de Langue",
     "calculatorTab": "Calculateur",
-    "trainingTab": "Allures d'Entraînement",
-    "racePredictorTab": "Prédicteur de Course",
+    "trainingTab": "Entraînement",
+    "racePredictorTab": "Course",
     "converterTab": "Convertisseur"
   },
   "settings": {

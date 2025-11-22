@@ -3,8 +3,8 @@
     "title": "Calculadora de Running",
     "changeLanguage": "Cambiar Idioma",
     "calculatorTab": "Calculadora",
-    "trainingTab": "Ritmos de Entrenamiento",
-    "racePredictorTab": "Predictor de Carreras",
+    "trainingTab": "Entrenamiento",
+    "racePredictorTab": "Carrera",
     "converterTab": "Convertidor"
   },
   "settings": {

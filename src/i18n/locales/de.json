@@ -3,8 +3,8 @@
     "title": "Lauf-Rechner",
     "changeLanguage": "Sprache Ändern",
     "calculatorTab": "Rechner",
-    "trainingTab": "Trainingstempo",
-    "racePredictorTab": "Wettkampf-Vorhersage",
+    "trainingTab": "Training",
+    "racePredictorTab": "Wettkampf",
     "converterTab": "Umrechner"
   },
   "calculator": {
