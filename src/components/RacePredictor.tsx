@@ -146,12 +146,7 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
               </Table>
             </TableContainer>
 
-            <Alert severity="info" sx={{ mt: 2, borderRadius: 2 }}>
-              <Typography variant="body2">
-                {t('racePredictor.note') ||
-                  'Note: Predictions are based on Jack Daniels\' Running Formula using the Riegel/Cameron performance model. Actual race times may vary based on training, conditions, and course difficulty.'}
-              </Typography>
-            </Alert>
+            {/* informational note removed as requested */}
           </Box>
         )}
       </CardContent>

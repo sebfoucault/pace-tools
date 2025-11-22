@@ -222,11 +222,7 @@ const TrainingPaces: React.FC<TrainingPacesProps> = ({ unitSystem, performanceIn
               );
             })()}
 
-            <Alert severity="info" sx={{ mt: 3, borderRadius: 2 }}>
-              <Typography variant="body2">
-                {t('trainingPaces.note')}
-              </Typography>
-            </Alert>
+            {/* informational note removed as requested */}
           </Box>
         )}
       </CardContent>

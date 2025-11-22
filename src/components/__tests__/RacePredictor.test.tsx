@@ -166,10 +166,7 @@ describe('RacePredictor Component', () => {
       expect(screen.getByText('5K')).toBeInTheDocument();
     });
 
-    it('should show note about prediction model', () => {
-      render(<RacePredictor unitSystem="metric" performanceIndex={45} />);
-      expect(screen.getByText(/racePredictor.note/i)).toBeInTheDocument();
-    });
+    // note about prediction model removed from UI; no longer testing for it
   });
 
   describe('Edge Cases', () => {
