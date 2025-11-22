@@ -102,7 +102,6 @@
     "racePredictorSteps": "Ingresa una distancia y tiempo en la pestaña Calculadora. La aplicación calcula tu Índice de Rendimiento (PI) y predice tiempos para distancias de carrera estándar.",
     "racePredictorFormula": "La Fórmula:",
     "racePredictorFormulaDesc": "donde v es velocidad (m/min), t es tiempo (minutos), i es intensidad, y PI es Índice de Rendimiento",
-    "racePredictorNote": "Nota: Las predicciones asumen entrenamiento, condiciones y nivel de esfuerzo similares. Los resultados reales pueden variar.",
     "tips": "Consejos y Trucos",
     "tip1": "Usa el modo automático con campos bloqueados para escenarios rápidos de \"qué pasaría si\" - bloquea tu ritmo objetivo y ve cómo la distancia afecta el tiempo.",
     "tip2": "Solo un campo puede estar bloqueado a la vez. Bloquear un nuevo campo desbloquea automáticamente el anterior.",
@@ -118,14 +117,12 @@
     "distance": "Distancia",
     "time": "Tiempo",
     "predictedTime": "Tiempo Predicho",
-    "pace": "Ritmo",
-    "note": "Nota: Las predicciones se basan en la Fórmula de Running de Jack Daniels usando el modelo de rendimiento de Riegel/Cameron. Los tiempos reales de carrera pueden variar según el entrenamiento, las condiciones y la dificultad del recorrido."
+    "pace": "Ritmo"
   },
   "trainingPaces": {
     "title": "Ritmos de Entrenamiento",
     "enterData": "Ingrese distancia y tiempo en la pestaña Calculadora para obtener recomendaciones de ritmo de entrenamiento.",
     "description": "Basado en su índice de rendimiento, aquí están los ritmos de entrenamiento recomendados para diferentes tipos de entrenamientos:",
-    "note": "Nota: Los ritmos de entrenamiento se basan en la Fórmula de Running de Jack Daniels. Ajuste según su condición física actual, objetivos de entrenamiento y condiciones ambientales.",
     "easy": "Carrera Suave",
     "marathon": "Ritmo Maratón",
     "threshold": "Umbral",

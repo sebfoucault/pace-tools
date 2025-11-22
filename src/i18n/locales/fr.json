@@ -101,8 +101,7 @@
     "racePredictorHow": "Comment ça marche :",
     "racePredictorSteps": "Entrez une distance et un temps dans l'onglet Calculateur. L'application calcule votre Indice de Performance (PI) et prédit les temps pour les distances de course standard.",
     "racePredictorFormula": "La Formule :",
-    "racePredictorFormulaDesc": "où v est la vitesse (m/min), t est le temps (minutes), i est l'intensité et PI est l'Indice de Performance",
-    "racePredictorNote": "Note : Les prédictions supposent un entraînement, des conditions et un niveau d'effort similaires. Les résultats réels peuvent varier.",
+      "racePredictorFormulaDesc": "où v est la vitesse (m/min), t est le temps (minutes), i est l'intensité et PI est l'Indice de Performance",
     "tips": "Conseils et Astuces",
     "tip1": "Utilisez le mode automatique avec des champs verrouillés pour des scénarios rapides \"et si\" - verrouillez votre allure cible et voyez comment la distance affecte le temps.",
     "tip2": "Un seul champ peut être verrouillé à la fois. Verrouiller un nouveau champ déverrouille automatiquement le précédent.",
@@ -119,7 +118,7 @@
     "time": "Temps",
     "predictedTime": "Temps Prédit",
     "pace": "Allure",
-    "note": "Note : Les prédictions sont basées sur la Formule de Course de Jack Daniels utilisant le modèle de performance de Riegel/Cameron. Les temps de course réels peuvent varier en fonction de l'entraînement, des conditions et de la difficulté du parcours."
+      "pace": "Allure"
   },
   "trainingPaces": {
     "title": "Allures d'Entraînement",

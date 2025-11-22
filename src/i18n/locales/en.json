@@ -102,7 +102,6 @@
     "racePredictorSteps": "Enter a distance and time in the Calculator tab. The app calculates your Performance Index (PI) and predicts times for standard race distances.",
     "racePredictorFormula": "The Formula:",
     "racePredictorFormulaDesc": "where v is velocity (m/min), t is time (minutes), i is intensity, and PI is Performance Index",
-    "racePredictorNote": "Note: Predictions assume similar training, conditions, and effort level. Actual results may vary.",
     "tips": "Tips & Tricks",
     "tip1": "Use auto mode with locked fields for quick \"what-if\" scenarios - lock your target pace and see how distance affects time.",
     "tip2": "Only one field can be locked at a time. Locking a new field automatically unlocks the previous one.",
@@ -118,14 +117,12 @@
     "distance": "Distance",
     "time": "Time",
     "predictedTime": "Predicted Time",
-    "pace": "Pace",
-    "note": "Note: Predictions are based on Jack Daniels' Running Formula using the Riegel/Cameron performance model. Actual race times may vary based on training, conditions, and course difficulty."
+    "pace": "Pace"
   },
   "trainingPaces": {
     "title": "Training Paces",
     "enterData": "Enter distance and time in the Calculator tab to get training pace recommendations.",
     "description": "Based on your performance index, here are recommended training paces for different workout types:",
-    "note": "Note: Training paces are based on Jack Daniels' Running Formula. Adjust based on your current fitness, training goals, and environmental conditions.",
     "easy": "Easy Run",
     "marathon": "Marathon Pace",
     "threshold": "Threshold",

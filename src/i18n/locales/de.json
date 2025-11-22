@@ -103,7 +103,6 @@
     "racePredictorSteps": "Geben Sie eine Distanz und Zeit im Rechner-Tab ein. Die App berechnet Ihren Leistungsindex (PI) und sagt Zeiten für Standardwettkampfdistanzen voraus.",
     "racePredictorFormula": "Die Formel:",
     "racePredictorFormulaDesc": "wobei v die Geschwindigkeit (m/min), t die Zeit (Minuten), i die Intensität und PI der Leistungsindex ist",
-    "racePredictorNote": "Hinweis: Vorhersagen setzen ähnliches Training, Bedingungen und Anstrengungsniveau voraus. Tatsächliche Ergebnisse können variieren.",
     "tips": "Tipps und Tricks",
     "tip1": "Verwenden Sie den Auto-Modus mit gesperrten Feldern für schnelle \"Was-wäre-wenn\" Szenarien - sperren Sie Ihr Ziel-Tempo und sehen Sie, wie Distanz die Zeit beeinflusst.",
     "tip2": "Nur ein Feld kann gleichzeitig gesperrt werden. Das Sperren eines neuen Felds entsperrt automatisch das vorherige.",
@@ -119,14 +118,12 @@
     "distance": "Distanz",
     "time": "Zeit",
     "predictedTime": "Vorhergesagte Zeit",
-    "pace": "Tempo",
-    "note": "Hinweis: Vorhersagen basieren auf Jack Daniels' Laufformel unter Verwendung des Riegel/Cameron Leistungsmodells. Tatsächliche Wettkampfzeiten können aufgrund von Training, Bedingungen und Streckenschwierigkeit variieren."
+    "pace": "Tempo"
   },
   "trainingPaces": {
     "title": "Trainingstempo",
     "enterData": "Geben Sie Distanz und Zeit im Rechner-Tab ein, um Trainingstempo-Empfehlungen zu erhalten.",
     "description": "Basierend auf Ihrem Leistungsindex sind hier empfohlene Trainingstempi für verschiedene Trainingsarten:",
-    "note": "Hinweis: Trainingstempi basieren auf Jack Daniels' Laufformel. Passen Sie sie an Ihre aktuelle Fitness, Trainingsziele und Umgebungsbedingungen an.",
     "easy": "Dauerlauf",
     "marathon": "Marathontempo",
     "threshold": "Schwellentempo",
