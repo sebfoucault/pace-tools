@@ -11,7 +11,6 @@ import HelpDialog from './components/HelpDialog';
 import type { UnitSystem } from './types';
 import './i18n/config';
 import theme from './theme';
-import UpdateSnackbar from './components/UpdateSnackbar';
 
 function App() {
   const { t } = useTranslation();
@@ -242,7 +241,7 @@ function App() {
           open={helpOpen}
           onClose={handleHelpClose}
         />
-        <UpdateSnackbar />
+
       </Box>
     </ThemeProvider>
   );
