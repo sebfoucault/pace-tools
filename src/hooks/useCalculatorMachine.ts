@@ -65,8 +65,13 @@ function calculateField(targetField: FieldName, inputs: CalculationInputs): stri
 // Reducer function
 function calculatorReducer(state: MachineState, action: CalculatorAction): MachineState {
   switch (action.type) {
-    case 'SET_MODE':
+    case 'SET_MODE': {
+      // If switching to manual mode, clear lockedField
+      if (action.mode === 'manual') {
+        return { ...state, mode: action.mode, lockedField: null, error: '' };
+      }
       return { ...state, mode: action.mode, error: '' };
+    }
 
     case 'UPDATE_FIELD':
       // Can't edit locked field in auto mode

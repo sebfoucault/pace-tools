@@ -9,7 +9,7 @@ describe('RunningCalculator - Lock Behavior', () => {
     fireEvent.click(autoModeButton);
   };
 
-  test('calculate buttons are disabled when any field is locked in manual mode', () => {
+  test('calculate buttons are enabled in manual mode after switching from auto mode', () => {
     render(<RunningCalculator unitSystem="metric" />);
     const distanceInput = screen.getByLabelText(/calculator.distance/i);
     fireEvent.change(distanceInput, { target: { value: '10' } });
@@ -19,9 +19,9 @@ describe('RunningCalculator - Lock Behavior', () => {
     fireEvent.click(distanceLockButton);
     const manualModeButton = screen.getByRole('button', { name: /manual mode/i });
     fireEvent.click(manualModeButton);
-    expect(screen.getByLabelText('Calculate distance from time and pace')).toBeDisabled();
-    expect(screen.getByLabelText('Calculate time from distance and pace')).toBeDisabled();
-    expect(screen.getByLabelText('Calculate pace from distance and time')).toBeDisabled();
+    expect(screen.getByLabelText('Calculate distance from time and pace')).not.toBeDisabled();
+    expect(screen.getByLabelText('Calculate time from distance and pace')).not.toBeDisabled();
+    expect(screen.getByLabelText('Calculate pace from distance and time')).not.toBeDisabled();
   });
 
   test('adjustment chips are disabled when their field is locked', () => {
