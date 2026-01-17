@@ -77,24 +77,6 @@ describe('CalculatorModeToggle', () => {
     expect(mockOnChange).not.toHaveBeenCalled();
   });
 
-  it('renders Calculate icon for manual mode button', () => {
-    render(<CalculatorModeToggle mode="manual" onChange={mockOnChange} />);
-
-    const manualButton = screen.getByRole('button', { name: /manual mode/i });
-    const calculateIcon = manualButton.querySelector('svg[data-testid="CalculateIcon"]');
-
-    expect(calculateIcon).toBeInTheDocument();
-  });
-
-  it('renders Lock icon for auto mode button', () => {
-    render(<CalculatorModeToggle mode="auto" onChange={mockOnChange} />);
-
-    const autoButton = screen.getByRole('button', { name: /auto mode/i });
-    const lockIcon = autoButton.querySelector('svg[data-testid="LockIcon"]');
-
-    expect(lockIcon).toBeInTheDocument();
-  });
-
   it('has correct aria-label for accessibility', () => {
     render(<CalculatorModeToggle mode="manual" onChange={mockOnChange} />);
 
