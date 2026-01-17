@@ -1,11 +1,7 @@
 {
   "app": {
     "title": "Calculadora de Running",
-    "changeLanguage": "Cambiar Idioma",
-    "calculatorTab": "Calculadora",
-    "trainingTab": "Entrenamiento",
-    "racePredictorTab": "Carrera",
-    "converterTab": "Convertidor"
+    "changeLanguage": "Cambiar Idioma"
   },
   "settings": {
     "title": "Configuración",

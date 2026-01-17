@@ -1,6 +1,5 @@
 import React from 'react';
 import { ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
-import { Lock, Calculate } from '@mui/icons-material';
 
 export type CalculatorMode = 'manual' | 'auto';
 
@@ -49,13 +48,11 @@ export const CalculatorModeToggle: React.FC<CalculatorModeToggleProps> = ({
     >
       <Tooltip title={manualTooltip} arrow>
         <ToggleButton value="manual" aria-label="manual mode">
-          <Calculate sx={{ fontSize: '1.1rem', mr: 0.75 }} />
           {manualLabel}
         </ToggleButton>
       </Tooltip>
       <Tooltip title={autoTooltip} arrow>
         <ToggleButton value="auto" aria-label="auto mode">
-          <Lock sx={{ fontSize: '1.1rem', mr: 0.75 }} />
           {autoLabel}
         </ToggleButton>
       </Tooltip>

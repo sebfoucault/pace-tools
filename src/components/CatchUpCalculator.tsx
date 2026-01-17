@@ -15,6 +15,7 @@ import {
   Alert,
   Divider,
 } from '@mui/material';
+import { UTurnLeft } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import TimeInput from './TimeInput';
 import { ChipsBar, type ChipOption } from './ChipsBar';
@@ -138,7 +139,8 @@ const CatchUpCalculator: React.FC<CatchUpCalculatorProps> = ({ unitSystem }) => 
   return (
     <Card elevation={3}>
       <CardContent sx={presets.cardContent}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <UTurnLeft sx={{ mr: 1.5, fontSize: 28, color: 'primary.main' }} />
           <Typography variant="h5" component="h2" sx={presets.title}>
             {t('catchUpCalculator.title') || 'Catch-Up Calculator'}
           </Typography>
@@ -227,7 +229,7 @@ const CatchUpCalculator: React.FC<CatchUpCalculatorProps> = ({ unitSystem }) => 
                   <TableBody>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 500, color: '#ff6b6b' }}>
-                        {t('catchUpCalculator.outSplit') || 'Out (opposite direction)'}
+                        {t('catchUpCalculator.outSplitShort') || 'Out'}
                       </TableCell>
                       <TableCell align="right">{formatTimeFromMinutes(result.timeOut)}</TableCell>
                       <TableCell align="right">
@@ -236,7 +238,7 @@ const CatchUpCalculator: React.FC<CatchUpCalculatorProps> = ({ unitSystem }) => 
                     </TableRow>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 500, color: '#51cf66' }}>
-                        {t('catchUpCalculator.backSplit') || 'Back (catch up)'}
+                        {t('catchUpCalculator.backSplitShort') || 'Back'}
                       </TableCell>
                       <TableCell align="right">{formatTimeFromMinutes(result.timeBack)}</TableCell>
                       <TableCell align="right">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ThemeProvider, CssBaseline, Container, AppBar, Toolbar, Typography, Box, IconButton, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider } from '@mui/material';
-import { Speed, Settings, Help, Fullscreen, FullscreenExit, Calculate, TrendingUp, SwapHoriz, FitnessCenter, CompareArrows, Menu } from '@mui/icons-material';
+import { Settings, Help, Fullscreen, FullscreenExit, Calculate, TrendingUp, SwapHoriz, FitnessCenter, UTurnLeft, Menu } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import RunningCalculator from './components/RunningCalculator';
 import RacePredictor from './components/RacePredictor';
@@ -123,7 +123,6 @@ function App() {
             >
               <Menu />
             </IconButton>
-            <Speed sx={{ mr: 2, fontSize: 28 }} />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
               {t('app.title')}
             </Typography>
@@ -229,12 +228,9 @@ function App() {
           }}
         >
           <Box sx={{ p: 2, background: 'linear-gradient(90deg, #0c1821 0%, #1b2a41 100%)', color: 'white' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Speed sx={{ mr: 1.5, fontSize: 28 }} />
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                {t('app.title')}
-              </Typography>
-            </Box>
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              {t('app.title')}
+            </Typography>
           </Box>
           <Divider />
           <List>
@@ -246,7 +242,7 @@ function App() {
                 <ListItemIcon>
                   <Calculate color={currentTab === 0 ? 'primary' : 'inherit'} />
                 </ListItemIcon>
-                <ListItemText primary={t('app.calculatorTab') || 'Calculator'} />
+                <ListItemText primary={t('calculator.title') || 'Pace Calculator'} />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
@@ -257,7 +253,7 @@ function App() {
                 <ListItemIcon>
                   <FitnessCenter color={currentTab === 1 ? 'primary' : 'inherit'} />
                 </ListItemIcon>
-                <ListItemText primary={t('app.trainingTab') || 'Training'} />
+                <ListItemText primary={t('trainingPaces.title') || 'Training Paces'} />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
@@ -268,7 +264,7 @@ function App() {
                 <ListItemIcon>
                   <TrendingUp color={currentTab === 2 ? 'primary' : 'inherit'} />
                 </ListItemIcon>
-                <ListItemText primary={t('app.racePredictorTab') || 'Race'} />
+                <ListItemText primary={t('racePredictor.title') || 'Race Predictor'} />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
@@ -279,7 +275,7 @@ function App() {
                 <ListItemIcon>
                   <SwapHoriz color={currentTab === 3 ? 'primary' : 'inherit'} />
                 </ListItemIcon>
-                <ListItemText primary={t('app.converterTab') || 'Converter'} />
+                <ListItemText primary={t('converter.title') || 'Speed ↔ Pace Converter'} />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
@@ -288,9 +284,9 @@ function App() {
                 onClick={() => handleNavigate(4)}
               >
                 <ListItemIcon>
-                  <CompareArrows color={currentTab === 4 ? 'primary' : 'inherit'} />
+                  <UTurnLeft color={currentTab === 4 ? 'primary' : 'inherit'} />
                 </ListItemIcon>
-                <ListItemText primary={t('app.catchUpTab') || 'Catch-Up'} />
+                <ListItemText primary={t('catchUpCalculator.title') || 'Catch-Up Calculator'} />
               </ListItemButton>
             </ListItem>
           </List>

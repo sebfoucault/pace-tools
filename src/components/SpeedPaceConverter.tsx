@@ -5,8 +5,9 @@ import {
   Typography,
   TextField,
   Grid,
+  Box,
 } from '@mui/material';
-import { SwapVert } from '@mui/icons-material';
+import { SwapHoriz } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import TimeInput from './TimeInput';
 import presets from '../styles/presets';
@@ -90,14 +91,16 @@ const SpeedPaceConverter: React.FC<SpeedPaceConverterProps> = ({ unitSystem }) =
   return (
     <Card elevation={3}>
       <CardContent sx={presets.cardContent}>
-        <Typography
-          variant="h5"
-          component="h2"
-          gutterBottom
-          sx={{ ...presets.title, mb: 3 }}
-        >
-          {t('converter.title')}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+          <SwapHoriz sx={{ mr: 1.5, fontSize: 28, color: 'primary.main' }} />
+          <Typography
+            variant="h5"
+            component="h2"
+            sx={presets.title}
+          >
+            {t('converter.title')}
+          </Typography>
+        </Box>
 
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={5}>
@@ -123,7 +126,7 @@ const SpeedPaceConverter: React.FC<SpeedPaceConverterProps> = ({ unitSystem }) =
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-            <SwapVert
+            <SwapHoriz
               sx={{
                 fontSize: 40,
                 color: 'action.active',

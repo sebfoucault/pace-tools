@@ -170,13 +170,16 @@ const RunningCalculator: React.FC<RunningCalculatorProps> = ({
       <CardContent sx={presets.cardContent}>
         <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 4 }}>
           <Box sx={{ flex: 1 }}>
-            <Typography
-              variant="h5"
-              component="h2"
-              sx={{ ...presets.title, mb: 1.5 }}
-            >
-              {t('calculator.title')}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+              <Calculate sx={{ mr: 1.5, fontSize: 28, color: 'primary.main' }} />
+              <Typography
+                variant="h5"
+                component="h2"
+                sx={presets.title}
+              >
+                {t('calculator.title')}
+              </Typography>
+            </Box>
             <CalculatorModeToggle
               mode={mode}
               onChange={(newMode) => dispatch({ type: 'SET_MODE', mode: newMode })}

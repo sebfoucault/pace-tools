@@ -13,6 +13,7 @@ import {
   Paper,
   Alert,
 } from '@mui/material';
+import { TrendingUp } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import PerformanceGauge from './PerformanceGauge';
 import { predictTimeFromPI } from '../utils/performanceIndex';
@@ -51,13 +52,16 @@ const RacePredictor: React.FC<RacePredictorProps> = ({ unitSystem, performanceIn
     <Card elevation={3}>
       <CardContent sx={presets.cardContent}>
         <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3 }}>
-          <Typography
-            variant="h5"
-            component="h2"
-            sx={presets.title}
-          >
-            {t('racePredictor.title') || 'Race Predictor'}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <TrendingUp sx={{ mr: 1.5, fontSize: 28, color: 'primary.main' }} />
+            <Typography
+              variant="h5"
+              component="h2"
+              sx={presets.title}
+            >
+              {t('racePredictor.title') || 'Race Predictor'}
+            </Typography>
+          </Box>
 
           <PerformanceGauge performanceIndex={performanceIndex} />
         </Box>

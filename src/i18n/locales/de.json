@@ -1,11 +1,7 @@
 {
   "app": {
     "title": "Lauf-Rechner",
-    "changeLanguage": "Sprache Ändern",
-    "calculatorTab": "Rechner",
-    "trainingTab": "Training",
-    "racePredictorTab": "Wettkampf",
-    "converterTab": "Umrechner"
+    "changeLanguage": "Sprache Ändern"
   },
   "calculator": {
     "title": "Laufrechner",
