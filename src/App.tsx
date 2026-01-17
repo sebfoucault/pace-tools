@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ThemeProvider, CssBaseline, Container, AppBar, Toolbar, Typography, Box, IconButton, Tabs, Tab } from '@mui/material';
-import { Speed, Settings, Help, Fullscreen, FullscreenExit, Calculate, TrendingUp, SwapHoriz, FitnessCenter, CompareArrows } from '@mui/icons-material';
+import { ThemeProvider, CssBaseline, Container, AppBar, Toolbar, Typography, Box, IconButton, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider } from '@mui/material';
+import { Speed, Settings, Help, Fullscreen, FullscreenExit, Calculate, TrendingUp, SwapHoriz, FitnessCenter, CompareArrows, Menu } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import RunningCalculator from './components/RunningCalculator';
 import RacePredictor from './components/RacePredictor';
@@ -20,6 +20,7 @@ function App() {
   const [helpOpen, setHelpOpen] = useState(false);
   const [unitSystem, setUnitSystem] = useState<UnitSystem>('metric');
   const [currentTab, setCurrentTab] = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [performanceIndex, setPerformanceIndex] = useState<number | null>(null);
 
@@ -43,8 +44,13 @@ function App() {
     setUnitSystem(newUnitSystem);
   };
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setCurrentTab(newValue);
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const handleNavigate = (index: number) => {
+    setCurrentTab(index);
+    setDrawerOpen(false);
   };
 
   const handlePerformanceIndexChange = (pi: number | null) => {
@@ -108,6 +114,15 @@ function App() {
 
         >
           <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open navigation"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+            >
+              <Menu />
+            </IconButton>
             <Speed sx={{ mr: 2, fontSize: 28 }} />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
               {t('app.title')}
@@ -138,62 +153,7 @@ function App() {
         </AppBar>
 
         <Container maxWidth="sm" sx={{ py: 4, position: 'relative' }}>
-          {/* Material-UI Tabs Navigation */}
-          <Tabs
-            value={currentTab}
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            allowScrollButtonsMobile
-            sx={{
-              mb: 3,
-              borderBottom: 1,
-              borderColor: 'divider',
-              '& .MuiTab-root': {
-                minHeight: 48,
-                minWidth: { xs: 'auto', sm: 120 },
-                px: { xs: 2, sm: 3 },
-                fontSize: { xs: '0.75rem', sm: '0.875rem' },
-                textTransform: 'none',
-                '& .MuiTab-iconWrapper': {
-                  marginRight: { xs: 0.5, sm: 1 },
-                },
-              },
-              '& .MuiTabs-scrollButtons': {
-                '&.Mui-disabled': {
-                  opacity: 0.3,
-                },
-              },
-            }}
-          >
-            <Tab
-              icon={<Calculate fontSize="small" />}
-              label={t('app.calculatorTab') || 'Calculator'}
-              iconPosition="start"
-            />
-            <Tab
-              icon={<FitnessCenter fontSize="small" />}
-              label={t('app.trainingTab') || 'Training'}
-              iconPosition="start"
-            />
-            <Tab
-              icon={<TrendingUp fontSize="small" />}
-              label={t('app.racePredictorTab') || 'Race Predictor'}
-              iconPosition="start"
-            />
-            <Tab
-              icon={<SwapHoriz fontSize="small" />}
-              label={t('app.converterTab') || 'Converter'}
-              iconPosition="start"
-            />
-            <Tab
-              icon={<CompareArrows fontSize="small" />}
-              label={t('app.catchUpTab') || 'Catch-Up'}
-              iconPosition="start"
-            />
-          </Tabs>
-
-          {/* Render all tabs but hide inactive ones to preserve state */}
+          {/* Render all views but hide inactive ones to preserve state */}
           <Box
             sx={{
               display: currentTab === 0 ? 'block' : 'none',
@@ -255,6 +215,86 @@ function App() {
           open={helpOpen}
           onClose={handleHelpClose}
         />
+
+        {/* Drawer Navigation */}
+        <Drawer
+          anchor="left"
+          open={drawerOpen}
+          onClose={handleDrawerToggle}
+          sx={{
+            '& .MuiDrawer-paper': {
+              width: 280,
+              boxSizing: 'border-box',
+            },
+          }}
+        >
+          <Box sx={{ p: 2, background: 'linear-gradient(90deg, #0c1821 0%, #1b2a41 100%)', color: 'white' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Speed sx={{ mr: 1.5, fontSize: 28 }} />
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                {t('app.title')}
+              </Typography>
+            </Box>
+          </Box>
+          <Divider />
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton
+                selected={currentTab === 0}
+                onClick={() => handleNavigate(0)}
+              >
+                <ListItemIcon>
+                  <Calculate color={currentTab === 0 ? 'primary' : 'inherit'} />
+                </ListItemIcon>
+                <ListItemText primary={t('app.calculatorTab') || 'Calculator'} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                selected={currentTab === 1}
+                onClick={() => handleNavigate(1)}
+              >
+                <ListItemIcon>
+                  <FitnessCenter color={currentTab === 1 ? 'primary' : 'inherit'} />
+                </ListItemIcon>
+                <ListItemText primary={t('app.trainingTab') || 'Training'} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                selected={currentTab === 2}
+                onClick={() => handleNavigate(2)}
+              >
+                <ListItemIcon>
+                  <TrendingUp color={currentTab === 2 ? 'primary' : 'inherit'} />
+                </ListItemIcon>
+                <ListItemText primary={t('app.racePredictorTab') || 'Race'} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                selected={currentTab === 3}
+                onClick={() => handleNavigate(3)}
+              >
+                <ListItemIcon>
+                  <SwapHoriz color={currentTab === 3 ? 'primary' : 'inherit'} />
+                </ListItemIcon>
+                <ListItemText primary={t('app.converterTab') || 'Converter'} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                selected={currentTab === 4}
+                onClick={() => handleNavigate(4)}
+              >
+                <ListItemIcon>
+                  <CompareArrows color={currentTab === 4 ? 'primary' : 'inherit'} />
+                </ListItemIcon>
+                <ListItemText primary={t('app.catchUpTab') || 'Catch-Up'} />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Drawer>
 
       </Box>
     </ThemeProvider>
