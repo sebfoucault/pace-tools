@@ -139,5 +139,23 @@
   "common": {
     "done": "Terminé",
     "close": "Fermer"
+  },
+  "catchUpCalculator": {
+    "title": "Calculateur de Rattrapage",
+    "helpText": "Planifiez des intervalles en courant avec un partenaire plus lent. Courez dans la direction opposée, puis faites demi-tour et rattrapez-le, en couvrant votre distance cible à votre allure d'intervalle.",
+    "partnerPace": "Allure du Partenaire ({{unit}})",
+    "yourPace": "Votre Allure ({{unit}})",
+    "targetDistance": "Distance Cible ({{unit}})",
+    "results": "Résultats",
+    "split": "Fraction",
+    "time": "Temps",
+    "distance": "Distance",
+    "outSplit": "Aller (direction opposée)",
+    "backSplit": "Retour (rattrapage)",
+    "total": "Total",
+    "errorPaceTooSlow": "Votre allure d'intervalle doit être plus rapide que l'allure de votre partenaire.",
+    "out": "ALLER",
+    "back": "RETOUR",
+    "partnerPath": "Partenaire →"
   }
 }

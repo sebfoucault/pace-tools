@@ -138,5 +138,23 @@
   "common": {
     "done": "Fertig",
     "close": "Schließen"
+  },
+  "catchUpCalculator": {
+    "title": "Aufhol-Rechner",
+    "helpText": "Planen Sie Intervalle beim Laufen mit einem langsameren Partner. Laufen Sie in die entgegengesetzte Richtung, drehen Sie dann um und holen Sie auf, wobei Sie Ihre Zieldistanz in Ihrem Intervalltempo zurücklegen.",
+    "partnerPace": "Partner-Tempo ({{unit}})",
+    "yourPace": "Ihr Tempo ({{unit}})",
+    "targetDistance": "Zieldistanz ({{unit}})",
+    "results": "Ergebnisse",
+    "split": "Split",
+    "time": "Zeit",
+    "distance": "Distanz",
+    "outSplit": "Hin (entgegengesetzte Richtung)",
+    "backSplit": "Zurück (aufholen)",
+    "total": "Gesamt",
+    "errorPaceTooSlow": "Ihr Intervalltempo muss schneller sein als das Tempo Ihres Partners.",
+    "out": "HIN",
+    "back": "ZURÜCK",
+    "partnerPath": "Partner →"
   }
 }

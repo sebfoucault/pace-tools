@@ -137,5 +137,23 @@
   "common": {
     "done": "Hecho",
     "close": "Cerrar"
+  },
+  "catchUpCalculator": {
+    "title": "Calculadora de Alcance",
+    "helpText": "Planifica intervalos al correr con un compañero más lento. Corre en dirección opuesta, luego da la vuelta y alcánzalo, cubriendo tu distancia objetivo a tu ritmo de intervalo.",
+    "partnerPace": "Ritmo del Compañero ({{unit}})",
+    "yourPace": "Tu Ritmo ({{unit}})",
+    "targetDistance": "Distancia Objetivo ({{unit}})",
+    "results": "Resultados",
+    "split": "División",
+    "time": "Tiempo",
+    "distance": "Distancia",
+    "outSplit": "Ida (dirección opuesta)",
+    "backSplit": "Vuelta (alcanzar)",
+    "total": "Total",
+    "errorPaceTooSlow": "Tu ritmo de intervalo debe ser más rápido que el ritmo de tu compañero.",
+    "out": "IDA",
+    "back": "VUELTA",
+    "partnerPath": "Compañero →"
   }
 }

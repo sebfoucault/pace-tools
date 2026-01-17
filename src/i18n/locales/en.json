@@ -5,7 +5,8 @@
     "calculatorTab": "Calculator",
     "trainingTab": "Training",
     "racePredictorTab": "Race",
-    "converterTab": "Converter"
+    "converterTab": "Converter",
+    "catchUpTab": "Catch-Up"
   },
   "settings": {
     "title": "Settings",
@@ -137,5 +138,23 @@
   "common": {
     "done": "Done",
     "close": "Close"
+  },
+  "catchUpCalculator": {
+    "title": "Catch-Up Calculator",
+    "helpText": "Plan intervals when running with a slower partner. Run in the opposite direction, then turn around and catch up, covering your target distance at your interval pace.",
+    "partnerPace": "Partner Pace ({{unit}})",
+    "yourPace": "Your Pace ({{unit}})",
+    "targetDistance": "Target Distance ({{unit}})",
+    "results": "Results",
+    "split": "Split",
+    "time": "Time",
+    "distance": "Distance",
+    "outSplit": "Out (opposite direction)",
+    "backSplit": "Back (catch up)",
+    "total": "Total",
+    "errorPaceTooSlow": "Your interval pace must be faster than your partner's pace.",
+    "out": "OUT",
+    "back": "BACK",
+    "partnerPath": "Partner →"
   }
 }

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { ThemeProvider, CssBaseline, Container, AppBar, Toolbar, Typography, Box, IconButton, Tabs, Tab } from '@mui/material';
-import { Speed, Settings, Help, Fullscreen, FullscreenExit, Calculate, TrendingUp, SwapHoriz, FitnessCenter } from '@mui/icons-material';
+import { Speed, Settings, Help, Fullscreen, FullscreenExit, Calculate, TrendingUp, SwapHoriz, FitnessCenter, CompareArrows } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import RunningCalculator from './components/RunningCalculator';
 import RacePredictor from './components/RacePredictor';
 import SpeedPaceConverter from './components/SpeedPaceConverter';
 import TrainingPaces from './components/TrainingPaces';
+import CatchUpCalculator from './components/CatchUpCalculator';
 import SettingsDialog from './components/SettingsDialog';
 import HelpDialog from './components/HelpDialog';
 import type { UnitSystem } from './types';
@@ -185,6 +186,11 @@ function App() {
               label={t('app.converterTab') || 'Converter'}
               iconPosition="start"
             />
+            <Tab
+              icon={<CompareArrows fontSize="small" />}
+              label={t('app.catchUpTab') || 'Catch-Up'}
+              iconPosition="start"
+            />
           </Tabs>
 
           {/* Render all tabs but hide inactive ones to preserve state */}
@@ -227,6 +233,14 @@ function App() {
             }}
           >
             <SpeedPaceConverter unitSystem={unitSystem} />
+          </Box>
+
+          <Box
+            sx={{
+              display: currentTab === 4 ? 'block' : 'none',
+            }}
+          >
+            <CatchUpCalculator unitSystem={unitSystem} />
           </Box>
         </Container>
 
